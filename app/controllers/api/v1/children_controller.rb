@@ -1,0 +1,59 @@
+module Api::V1
+  class ChildrenController < ApplicationController
+    before_action :authenticate_request
+    before_action :set_child, only: [:show, :update, :destroy]
+    before_action :getAllChildren, only: [:index, :create, :destroy]
+    # GET /children
+    def index
+      render json: @children, :include => {:user => {:only => :name}}
+      #render json: @current_user
+    end
+
+    # GET /children/1
+    def show
+      render json: @child, :include => {:user => {:only => :name}}
+    end
+
+    # POST /children
+    def create
+      @child = Child.new(child_params)
+
+      if @child.save
+        render json: @children, status: :created
+      else
+        render json: @child.errors, status: :unprocessable_entity,  message: 'Aluno cadastrado com sucesso!'
+      end
+    end
+
+    # PATCH/PUT /children/1
+    def update
+      if @child.update(child_params)
+        render json: @child
+      else
+        render json: @child.errors, status: :unprocessable_entity
+      end
+    end
+
+    # DELETE /children/1
+    def destroy
+      @child.destroy
+    end
+
+    private
+      
+    def getAllChildren
+      @children = Child.allChild(@current_user)
+    end
+    
+    
+    # Use callbacks to share common setup or constraints between actions.
+      def set_child
+        @child = Child.find(params[:id])
+      end
+
+      # Only allow a trusted parameter "white list" through.
+      def child_params
+        params.require(:child).permit(:nome, :contato, :nascimento, :responsavel, :parentesco, :sexo, :status, :user_id)
+      end
+  end
+end

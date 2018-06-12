@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  monitor_user: one
+  child: one
+  status: false
+
+two:
+  monitor_user: two
+  child: two
+  status: false
