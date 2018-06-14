@@ -31,13 +31,12 @@ class AuthenticateUser
       
       if user.nil?
         user = MonitorUser.find_by(login: login)
-        return user if user.authenticate(password)
-        
+        return user if !user.nil? && user.authenticate(password)        
       end
       #user = MonitorUser.find_by(login: login)          
       #return user if user && user.authenticate(password)
             
-      errors.add :user_authentication, 'Dados inválidos'
+      return errors.add :user_authentication, 'Dados inválidos'
       nil
     
     end

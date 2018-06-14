@@ -32,12 +32,12 @@ module Api::V1
       user = MonitorUser.find(@sms_message.monitor_user_id)      
       @sms_message.user_id = user.user_id
       
-      user = Child.find_by(nome: params[:child])
-      @sms_message.child_id = user.id
+      user = Child.find_by(nome: params[:child], user_id: user.user_id)
+      @sms_message.child_id = user.id if user
       
-      if @sms_message.save!
-        @sms_messages = SmsMessage.where(user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
-        render json: @sms_messages, status: :created
+      if @sms_message.save! && !user.nil?
+        @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
+        render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}, status: :created
       else
         render json: @sms_message.errors, status: :unprocessable_entity
       end
