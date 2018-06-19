@@ -2,7 +2,7 @@ module Api::V1
   class SmsMessagesController < ApplicationController
     #before_action :getAllSms, only: [:index, :create]
     before_action :set_sms_message, only: [:show, :update, :destroy]
-    #skip_before_action :authenticate_request
+    skip_before_action :authenticate_request
     
     # GET /sms_messages
     def index
@@ -84,20 +84,20 @@ module Api::V1
      def notifica
         
       puts "dentro notifica #{params[:estado]}"
-     #   case params[:estado].to_i
-     #     when == 1
+        case params[:estado].to_i
+          when  1
             #mensagem entregue ao destinatário
 
-     #     when == 2
+          when  2
             #Mensagem não foi entregue ao destinatário.
 
-    #       when == 4
-    #         #Mensagem processada e entregue ao SMSC. Este estado é intermediário
+          when  4
+             #Mensagem processada e entregue ao SMSC. Este estado é intermediário
 
-    #       else
-    #         #Mensagem rejeitada pela operadora
+           else
+             #Mensagem rejeitada pela operadora
 
-    #     end
+           end
 
 
       
