@@ -7,7 +7,7 @@ class Sms
     #$url = 'https://dashboard.360nrs.com/api/rest/sms'    
     $login = "ErikRdeSouza"
     $token = "f6140de80f9c14cf39e30764f9d0aa2c"
-    $urlResponse = 'https://childrenscanapi.herokuapp.com/api/v1/notifica?estado=%d'
+    #$urlResponse = 'https://childrenscanapi.herokuapp.com/api/v1/notifica?estado=%d'
     $data = ""
     
     def initialize(numero = '', msn= '')
@@ -25,7 +25,7 @@ class Sms
         #return HTTP.basic_auth(:user => "ErikRdeSouza", :pass => "08121598").post($url, :ssl_context => ctx, :body => $data)
         
         #Usar para kingsms
-        return HTTP.get($url, :params => {acao: "sendsms", login: $login, token: $token, numero: "11946344764", msg: @msn })   
+        return HTTP.get($url, :params => {acao: "sendsms", login: $login, token: $token, numero: formContactNumber, msg: @msn })   
     end
 
     def getSaldo
