@@ -1,6 +1,4 @@
-class GenerateSms
-
-    
+class GenerateSms    
 
     def initialize(acao, periodo) 
         @acao = acao

@@ -2,7 +2,7 @@ module Api::V1
   class SmsMessagesController < ApplicationController
     #before_action :getAllSms, only: [:index, :create]
     before_action :set_sms_message, only: [:show, :update, :destroy]
-    skip_before_action :authenticate_request
+    #skip_before_action :authenticate_request
     
     # GET /sms_messages
     def index
@@ -37,26 +37,26 @@ module Api::V1
       @sms_message.child_id = user.id if user
       
       unless user.nil?
-        genereteSms = GenerateSms.new('Entrada', 'Manhã')
+        genereteSms = GenerateSms.new(params[:acao], params[:periodo])
         sms = genereteSms.generete_sms(params[:child])
-
-        sendSms = SendSmsToApi.new(user.contato, genereteSms.generete_sms(params[:child]) , 'Erikikoo') 
-        #sendSms.sendSmsToApi
-        puts sendSms.sendSmsToApi
-        #render json: status, status: :success
-      #   #if status.result.accepted
-      #     if @sms_message.save! && !user.nil? 
-      #       @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
-      #       render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}, status: :created
-      #     else
-      #       render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
-      #     end
-      #   #end  
-       else
-         render json: @sms_message.errors, error: "Aluno não encontrado",status: :unprocessable_entity
-       end
+        
+        sendSms = Sms.new(user.contato, genereteSms.generete_sms(params[:child])) 
+        msnSendSuccess = sendSms.sendSmsToApi
+        
+        
+         if msnSendSuccess.status == 200
+             if @sms_message.save! && !user.nil? 
+               @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
+               render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}, status: :created
+             else
+               render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
+             end
+           #end  
+         else
+           render json: @sms_message.errors, error: "Aluno não encontrado",status: :unprocessable_entity
+         end
       
-      
+      end
       #if @sms_message.save! && !user.nil? 
        # @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
       #render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}, status: :created
@@ -81,27 +81,7 @@ module Api::V1
     end
 
 
-     def notifica
-        
-      puts "dentro notifica #{params[:estado]}"
-        case params[:estado].to_i
-          when  1
-            #mensagem entregue ao destinatário
-
-          when  2
-            #Mensagem não foi entregue ao destinatário.
-
-          when  4
-             #Mensagem processada e entregue ao SMSC. Este estado é intermediário
-
-           else
-             #Mensagem rejeitada pela operadora
-
-           end
-
-
-      
-     end 
+     
     
 
     private
@@ -116,7 +96,7 @@ module Api::V1
 
       # Only allow a trusted parameter "white list" through.
       def sms_message_params
-        params.require(:sms_message).permit(:monitor_user_id, :child, :user_id, :status)
+        params.require(:sms_message).permit(:monitor_user_id, :child, :user_id, :status, :acao, :perido)
       end
   end
 end
