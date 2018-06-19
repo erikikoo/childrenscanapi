@@ -1,7 +1,7 @@
 class User < ApplicationRecord
    
     has_many :monitor_users, dependent: :destroy
-    has_many :children, dependent: :destroy
+    
    
     #Validations
    validates_presence_of :name, :login, :password_digest

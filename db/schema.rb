@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_31_143531) do
+ActiveRecord::Schema.define(version: 2018_06_18_200607) do
 
   create_table "children", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "nome"
@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(version: 2018_05_31_143531) do
     t.boolean "status", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_children_on_user_id"
+    t.bigint "monitor_user_id"
+    t.index ["monitor_user_id"], name: "index_children_on_monitor_user_id"
   end
 
   create_table "monitor_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 2018_05_31_143531) do
     t.bigint "monitor_user_id"
     t.bigint "child_id"
     t.bigint "user_id"
-    t.boolean "status", default: false
+    t.integer "status", limit: 2, default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["child_id"], name: "index_sms_messages_on_child_id"
@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 2018_05_31_143531) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "children", "users"
+  add_foreign_key "children", "monitor_users"
   add_foreign_key "monitor_users", "users"
   add_foreign_key "sms_messages", "children"
   add_foreign_key "sms_messages", "monitor_users"

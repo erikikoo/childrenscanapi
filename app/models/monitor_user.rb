@@ -1,7 +1,7 @@
 class MonitorUser < ApplicationRecord
   belongs_to :user
   has_many :sms_messages, dependent: :destroy
-  
+  has_many :children, dependent: :destroy
    #Validations
    validates_presence_of :login, :password_digest
    validates :login, uniqueness: true

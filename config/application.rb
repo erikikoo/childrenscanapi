@@ -47,5 +47,7 @@ module ChildrenScanApi
     #autoloads lib folder during development
     config.autoload_paths << Rails.root.join('lib')
 
+    
+
   end
 end

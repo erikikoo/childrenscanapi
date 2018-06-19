@@ -9,31 +9,52 @@ require 'faker'
 Faker::Config.locale = 'pt-BR'
 puts "Criando Usuario"
     
-    User.create!(name: "Erik R de Souza", password: '123456', login: 'erikikoo@hotmail.com', contato: Faker::Base.numerify('(##) #####-####'), level: 3)
-    User.create!(name: "Paula Cristina", password: '123456', login: 'paula@paula.com', contato: Faker::Base.numerify('(##) #####-####'))
-20.times do    
-    User.create!(name: Faker::Name.name, password: '123456', login: Faker::Internet.email, contato: Faker::Base.numerify('(##) #####-####'))
+    a = User.create!(name: "Erik R de Souza", password: '123456', login: 'erikikoo@hotmail.com', contato: Faker::Base.numerify('(##) #####-####'), level: 3)
+    
+    puts "Criando Monitor"    
+    
+    5.times do
+        b = MonitorUser.create!(name: Faker::Name.name, password: '123456', login: Faker::Name.name, user_id: a.id)
+        
+        puts 'Criando Crianças'
+        
+        rand(1..8).times do
+            Child.create!(nome: Faker::Name.name, nascimento: Faker::Date.between(2.days.ago, Date.today), responsavel: Faker::Name.name, parentesco: 'pai', sexo: 'm', contato: Faker::Base.numerify('(##) #####-####'), monitor_user_id: b.id)
+        end    
+        puts 'Crianças criadas'
+    end
+
+    puts 'monitor criado '
+    
+    
+    
+5.times do    
+    a = User.create!(name: Faker::Name.name, password: '123456', login: Faker::Internet.email, contato: Faker::Base.numerify('(##) #####-####'))
+    puts "Criando Monitor"    
+    
+    5.times do
+        b = MonitorUser.create!(name: Faker::Name.name, password: '123456', login: Faker::Name.name, user_id: a.id)
+        
+        puts 'Criando Crianças'
+        rand(1..8).times do
+           c = Child.create!(nome: Faker::Name.name, nascimento: Faker::Date.between(2.days.ago, Date.today), responsavel: Faker::Name.name, parentesco: 'pai', sexo: 'm', contato: Faker::Base.numerify('(##) #####-####'), monitor_user_id: b.id)
+
+            puts "Criando SMS"
+            rand(1..15).times do
+                SmsMessage.create!(child_id: c.id, monitor_user_id: b.id,user_id: a.id, status: rand(0..1))
+            end
+            puts 'Usuario SMS'
+        end    
+        puts 'Crianças criadas'
+    end
+
+    puts 'monitor criado '    
+    
 end    
-puts 'Usuario criado'
-puts '==============================================='
-puts 'Criando Crianças'
-100.times do
-    Child.create!(nome: Faker::Name.name, nascimento: Faker::Date.between(2.days.ago, Date.today), responsavel: Faker::Name.name, parentesco: 'pai', sexo: 'm', contato: Faker::Base.numerify('(##) #####-####'), user_id: rand(1..2))
-end
-puts 'Crianças criadas'
-puts '==============================================='
-puts "Criando Monitor"
-5.times do
-    MonitorUser.create!(name: Faker::Name.name, password: '123456', login: Faker::Name.name, user_id: rand(1..2))
-end
-puts 'Usuario monitor'
+
 
 puts '==============================================='
-puts "Criando SMS"
-200.times do
-    SmsMessage.create!(child_id: rand(1..100), monitor_user_id: rand(1..5),user_id: 2, status: rand(0..1))
-end
-puts 'Usuario SMS'
+
 
 
 

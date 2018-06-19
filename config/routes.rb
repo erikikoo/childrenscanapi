@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       get 'test', to: 'users#test'
       resources :sms_messages, only: [:index, :show, :create, :destroy]
       get 'sms_historico', to: 'sms_messages#app_historico'
+      get 'notifica', to: 'sms_messages#notifica'
       resources :monitor_users
       resources :users
       resources :children
