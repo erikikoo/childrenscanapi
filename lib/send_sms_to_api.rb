@@ -22,15 +22,13 @@ class SendSmsToApi
         ctx = OpenSSL::SSL::SSLContext.new
         ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
         $data = '{"to":["5511946344764"],"message":"'+@msn+'","from":"'+@emp+'", "notificationUrl":"'+$urlResponse+'"}'
-        #$data = '"to":["5511946344764"],"message":"'+@msn+'","from":"'+@emp+'"'
+        #$data = '{"to":["5511946344764"],"message":"'+@msn+'","from":"'+@emp+'"}'
         #$data = '{"to":["'+formContactNumber+'"],"message":"'+@msn+'","from":"'+@emp+'"}'
         puts $data
-        resposte = HTTP.basic_auth(:user => "Haianny", :pass => "08121598").post($url, :ssl_context => ctx, :body => $data)
+        #resposte = HTTP.basic_auth(:user => "Haianny", :pass => "08121598").post($url, :ssl_context => ctx, :body => $data)
         #resposte = HTTP.basic_auth(:user => "ErikRdeSouza", :pass => "08121598").post($url, :ssl_context => ctx, :body => $data)
-        puts resposte
-
-        
-        return resposte
+        #puts resposte
+        #return resposte
         
     end
 

@@ -41,8 +41,9 @@ module Api::V1
         sms = genereteSms.generete_sms(params[:child])
 
         sendSms = SendSmsToApi.new(user.contato, genereteSms.generete_sms(params[:child]) , 'Erikikoo') 
-        status = sendSms.sendSmsToApi
-        
+        #sendSms.sendSmsToApi
+        puts sendSms.sendSmsToApi
+        #render json: status, status: :success
       #   #if status.result.accepted
       #     if @sms_message.save! && !user.nil? 
       #       @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
@@ -51,9 +52,9 @@ module Api::V1
       #       render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
       #     end
       #   #end  
-      # else
-      #   render json: @sms_message.errors, error: "Aluno não encontrado",status: :unprocessable_entity
-      # end
+       else
+         render json: @sms_message.errors, error: "Aluno não encontrado",status: :unprocessable_entity
+       end
       
       
       #if @sms_message.save! && !user.nil? 
@@ -62,7 +63,7 @@ module Api::V1
       
       #else
       #  
-      end
+      #end
     end
 
     # PATCH/PUT /sms_messages/1
