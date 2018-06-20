@@ -25,6 +25,7 @@ class Sms
         #return HTTP.basic_auth(:user => "ErikRdeSouza", :pass => "08121598").post($url, :ssl_context => ctx, :body => $data)
         
         #Usar para kingsms
+        puts 'dentro do sendSmsApi'
         return HTTP.get($url, :params => {acao: "sendsms", login: $login, token: $token, numero: formContactNumber, msg: @msn })   
     end
 

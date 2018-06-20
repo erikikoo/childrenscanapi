@@ -40,6 +40,8 @@ module Api::V1
         genereteSms = GenerateSms.new(params[:acao], params[:periodo])
         sms = genereteSms.generete_sms(params[:child])
         
+        puts "dentro do sms create"
+
         sendSms = Sms.new(user.contato, genereteSms.generete_sms(params[:child])) 
         msnSendSuccess = sendSms.sendSmsToApi
         
