@@ -36,27 +36,27 @@ module Api::V1
       user = Child.find_by(nome: params[:child], monitor_user_id: @sms_message.monitor_user_id)
       @sms_message.child_id = user.id if user
       
-      unless user.nil?
-        genereteSms = GenerateSms.new(params[:acao], params[:periodo])
-        sms = genereteSms.generete_sms(params[:child])
+      # unless user.nil?
+      #   genereteSms = GenerateSms.new(params[:acao], params[:periodo])
+      #   sms = genereteSms.generete_sms(params[:child])
         
-        puts "dentro do sms create"
+      #   puts "dentro do sms create"
 
-        sendSms = Sms.new(user.contato, genereteSms.generete_sms(params[:child])) 
-        msnSendSuccess = sendSms.sendSmsToApi
+      #   sendSms = Sms.new(user.contato, genereteSms.generete_sms(params[:child])) 
+      #   msnSendSuccess = sendSms.sendSmsToApi
         
         
-         if msnSendSuccess.status == 200
-             if @sms_message.save! && !user.nil? 
-               @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
-               render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}, status: :created
-             else
-               render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
-             end
-           #end  
-         else
-           render json: @sms_message.errors, error: "Aluno não encontrado",status: :unprocessable_entity
-         end
+      #    if msnSendSuccess.status == 200
+      #        if @sms_message.save! && !user.nil? 
+      #          @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
+      #          render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}, status: :created
+      #        else
+      #          render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
+      #        end
+      #      #end  
+      #    else
+      #      render json: @sms_message.errors, error: "Aluno não encontrado",status: :unprocessable_entity
+      #    end
       
       end
       #if @sms_message.save! && !user.nil? 
