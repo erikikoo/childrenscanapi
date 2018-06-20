@@ -51,19 +51,11 @@ module Api::V1
              else
                render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
              end
-           #end  
+            
          else
            render json: @sms_message.errors, error: "Aluno não encontrado",status: :unprocessable_entity
-         end
-      
-      end
-      #if @sms_message.save! && !user.nil? 
-       # @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
-      #render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}, status: :created
-      
-      #else
-      #  
-      #end
+         end      
+      end   
     end
 
     # PATCH/PUT /sms_messages/1
