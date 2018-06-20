@@ -39,7 +39,7 @@ class Sms
     def formContactNumber
         unless @numero.nil?
             number = @numero.gsub(')', '').gsub('(', '').gsub(' ', '').gsub('-', '') 
-            return numberFormat = "55#{number}"
+            return numberFormat = "#{number}"
         else
             return @numero
         end    
