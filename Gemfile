@@ -8,6 +8,7 @@ gem 'rack-attack'
 gem 'jwt'
 gem 'simple_command'
 gem "http"
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.0'
 # Use mysql as the database for Active Record
@@ -41,7 +42,7 @@ end
 
 group :production do
   gem 'pg'
-  
+  gem "redis", "~> 4.0"
 end
 
 
