@@ -37,23 +37,23 @@ module Api::V1
       
        unless child.nil?       
        
-        # sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
+         sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
         
-        # result = JSON.parse(sendSms.sendSmsToApi.body)       
+        result = JSON.parse(sendSms.sendSmsToApi.body)       
         # #puts GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])
-        # if result["status"] == 'success'
-        #     if @sms_message.save! && !child.nil? 
-        #          @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
+         if result["status"] == 'success'
+             if @sms_message.save! && !child.nil? 
+                  @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
           
-        #          render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}, status: :created
-        #     else
-        #          render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
-        #     end
-        # else
+                  render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}, status: :created
+             else
+                  render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
+             end
+        else
                 
-            err = 'teste'#CustomHandleError.handleError(result["cause"])               
-            render json: {error: err}
-         #end      
+             err = 'teste'#CustomHandleError.handleError(result["cause"])               
+             render json: {error: err}
+        end      
         
        end
   end
