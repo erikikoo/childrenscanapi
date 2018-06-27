@@ -15,7 +15,7 @@ class AuthorizeApiRequest
 
   def user
     @user ||= User.select(:name, :login, :id, :level).find(decoded_auth_token["user_id"]) if decoded_auth_token
-    #@user ||= User.find(JsonWebToken.decode(http_auth_header)) if decoded_auth_token
+    
     @user || errors.add(:token, 'token inválido') && nil
   end
 

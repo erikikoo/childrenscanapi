@@ -3,7 +3,7 @@ module Api::V1
     #before_action :getAllSms, only: [:index, :create]
     before_action :set_sms_message, only: [:show, :update, :destroy]
     #skip_before_action :authenticate_request
-    
+    #require 'json'
     # GET /sms_messages
     def index
       #@sms_messages = SmsMessage.includes(:monitor_user, :child).order('created_at DESC')            
@@ -13,11 +13,10 @@ module Api::V1
     def app_historico
       #@sms_messages = SmsMessage.where(user_id: @current_user.id).order(id: :desc).limit(5)
       #@sms_messages = SmsMessage.limit(5)
-      if (@current_user.level <= 2) 
+      #if (@current_user.level <= 2) 
         @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
-      else
-        @sms_messages = SmsMessage.where(user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
-      end  
+      
+      #end  
       render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}
     end
 
@@ -30,33 +29,34 @@ module Api::V1
     def create
       @sms_message = SmsMessage.new(sms_message_params)
       
-      user = MonitorUser.find(@sms_message.monitor_user_id)      
-      @sms_message.user_id = user.user_id
+      monitor = MonitorUser.find(@sms_message.monitor_user_id)
       
-      user = Child.find_by(nome: params[:child], monitor_user_id: @sms_message.monitor_user_id)
-      @sms_message.child_id = user.id if user
+      child = Child.find_by(nome: params[:child], user_id: monitor.user_id)
+       
+       @sms_message.child_id = child.id if child
       
-      unless user.nil?
-        genereteSms = GenerateSms.new(params[:acao], params[:periodo])
-        sms = genereteSms.generete_sms(params[:child])
+       unless child.nil?       
+       
+        # sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
         
-        sendSms = Sms.new(user.contato, genereteSms.generete_sms(params[:child])) 
-        msnSendSuccess = sendSms.sendSmsToApi
+        # result = JSON.parse(sendSms.sendSmsToApi.body)       
+        # #puts GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])
+        # if result["status"] == 'success'
+        #     if @sms_message.save! && !child.nil? 
+        #          @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
+          
+        #          render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}, status: :created
+        #     else
+        #          render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
+        #     end
+        # else
+                
+            err = 'teste'#CustomHandleError.handleError(result["cause"])               
+            render json: {error: err}
+         #end      
         
-        
-         if msnSendSuccess.status == 200
-             if @sms_message.save! && !user.nil? 
-               @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
-               render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}, status: :created
-             else
-               render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
-             end
-            
-         else
-           render json: @sms_message.errors, error: "Aluno não encontrado",status: :unprocessable_entity
-         end      
-      end   
-    end
+       end
+  end
 
     # PATCH/PUT /sms_messages/1
     def update
@@ -88,7 +88,7 @@ module Api::V1
 
       # Only allow a trusted parameter "white list" through.
       def sms_message_params
-        params.require(:sms_message).permit(:monitor_user_id, :child, :user_id, :status, :acao, :perido)
+        params.require(:sms_message).permit(:monitor_user_id, :child, :user_id, :status, :msn)
       end
   end
 end

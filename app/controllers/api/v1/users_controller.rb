@@ -2,36 +2,40 @@ module Api::V1
   class UsersController < ApplicationController
     before_action :set_user, only: [:show, :update, :destroy]
     
-    skip_before_action :authenticate_request, only: %i[login register]
-    
-    
+    skip_before_action :authenticate_request, only: %i[adminLogin appLogin]   
 
-    def login
-      #authenticate params[:email], params[:password]
-      #access_number = User.select(:access_count).find_by(email: params[:email])
-      #a = User.select(:access_count).find_by_email('erikikoo@hotmail.com')
-      if ((authenticate params[:login], params[:password]) && @current_user)
+    def appLogin
+      
+      if ((authenticate params[:login], params[:password]))
+        
+        #access_number = User.select(:access_count).find_by(login: params[:login])
+        
+        access_number = MonitorUser.select(:access_count).find_by(login: params[:login])          
+        unless (access_number.nil?)
+            if (access_number == 0 )
+            #access_update = (access_number.access_count + 1)        
+            # User.find_by(login: params[:login]).update(access_count: access_update)
+              puts access_number.access_count
+              return access_number.access_count
+            else 
+                access_update = (access_number.access_count + 1)          
+                MonitorUser.find_by(login: params[:login]).update(access_count: access_update)          
+            end
+          end  
+        end        
+      end
+    
+    def adminLogin
+      
+      if ((authenticate params[:login], params[:password]))
         
         access_number = User.select(:access_count).find_by(login: params[:login])
+        access_update = (access_number.access_count + 1)        
+        User.find_by(login: params[:login]).update(access_count: access_update)
         
-        unless (access_number.nil?)
-          access_update = (access_number.access_count + 1)
-        
-          User.find_by(login: params[:login]).update(access_count: access_update)
-      
-        else 
-          access_number = MonitorUser.select(:access_count).find_by(login: params[:login])
-          unless (access_number.nil?)
-            access_update = (access_number.access_count + 1)          
-            MonitorUser.find_by(login: params[:login]).update(access_count: access_update)
-          
-          end  
-          
-          
-        end  
       end  
       
-    end  
+    end
     
 
     # GET /users
@@ -84,27 +88,37 @@ module Api::V1
 
  
   def authenticate(login, password)
-    #if @current_user.nil?
-    #  render json: { message: "Você já está logado" }
-    #else   
-      user = User.select(:id, :level, :name).find_by(login: login)
       
-      user = MonitorUser.select(:id, :level, :name, :user_id).find_by(login: login) if user.nil?
+      user = User.select(:id, :level, :name, :access_count).find_by(login: login)
+      
+      user = MonitorUser.select(:id, :level, :name, :user_id, :access_count).find_by(login: login) if user.nil?
       
       command = AuthenticateUser.call(login, password)
     
       if command.success?
-        render json: {
-          id: user.id,
-          name: user.name, 
-          level: user.level,        
-          access_token: command.result,
-          message: 'Login realizado com sucesso!'
-        }
+        if (user.access_count > 0)
+          render json: {
+            id: user.id,
+            name: user.name, 
+            level: user.level,        
+            access_token: command.result,
+            message: 'Login realizado com sucesso!'
+          }
+        else 
+            render json: {
+              id: user.id,
+              name: user.name, 
+              level: user.level,        
+              access_token: command.result,
+              message: 'Login realizado com sucesso!',
+              access_number: user.access_count
+            }
+        end
+        
       else
         render json: { error: command.errors }, status: :unauthorized
       end
-    #end
-  end   
+    
+    end   
   end
 end

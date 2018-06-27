@@ -5,8 +5,7 @@ module Api::V1
     before_action :getAllChildren, only: [:index, :create, :destroy]
     # GET /children
     def index
-      render json: @children, :include => {:user => {:only => :name}}
-      #render json: @current_user
+      render json: @children, :include => {:user => {:only => :name}}      
     end
 
     # GET /children/1
@@ -42,7 +41,12 @@ module Api::V1
     private
       
     def getAllChildren
-      @children = Child.allChild(@current_user)
+      #monitor = User.find(@current_user)
+      if (@current_user.level == 3) 
+        @children = Child.all.order(user_id: :asc)
+       else 
+        @children = Child.where(user_id: @current_user)#.includes(:monitor_user)
+       end
     end
     
     

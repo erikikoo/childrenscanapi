@@ -1,7 +1,7 @@
 class Child < ApplicationRecord
     has_many :sms_messages, dependent: :destroy
     
-    belongs_to :monitor_user
+    belongs_to :user
     
     def self.allChild(user)
         if user.level === 3

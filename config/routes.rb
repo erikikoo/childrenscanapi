@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   
   namespace :api do
     namespace :v1 do
-      post 'auth/login', to: 'users#login'
+      post 'app/auth/login', to: 'users#appLogin'
+      post 'auth/login', to: 'users#adminLogin'
       get 'test', to: 'users#test'
       get 'sms_historico', to: 'sms_messages#app_historico'      
       resources :sms_messages, only: [:index, :show, :create, :destroy]

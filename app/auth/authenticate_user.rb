@@ -1,5 +1,5 @@
 class AuthenticateUser
-    #require 'jwt'
+    
     prepend SimpleCommand
     attr_accessor :login, :password    
     
@@ -12,13 +12,9 @@ class AuthenticateUser
     
     #this is where the result gets returned
     def call
-      #user_id: user.id
-      if user  
-        #if user != nil
-          JsonWebToken.encode(user_id: user.id )
-        #else 
-        #  JsonWebToken.encode(user_id: monitor.id )
-        #end
+     
+      if user        
+          JsonWebToken.encode(user_id: user.id )      
       end  
     end
   
@@ -32,9 +28,7 @@ class AuthenticateUser
       if user.nil?
         user = MonitorUser.find_by(login: login)
         return user if !user.nil? && user.authenticate(password)        
-      end
-      #user = MonitorUser.find_by(login: login)          
-      #return user if user && user.authenticate(password)
+      end     
             
       return errors.add :user_authentication, 'Dados inválidos'
       nil

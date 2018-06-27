@@ -25,24 +25,25 @@ class Sms
         #return HTTP.basic_auth(:user => "ErikRdeSouza", :pass => "08121598").post($url, :ssl_context => ctx, :body => $data)
         
         #Usar para kingsms
-        
-        return HTTP.get($url, :params => {acao: "sendsms", login: $login, token: $token, numero: formContactNumber, msg: @msn })   
+        #sendsms
+        return HTTP.get($url, :params => {acao: "sendsms", login: $login, token: $token, numero: formContactNumber(@numero), msg: @msn })   
     end
 
     def getSaldo
-        saldo = HTTP.get($url, :params => {acao: "saldo", login: $login, token: $token })   
-        return saldo
+        sms = HTTP.get($url, :params => {acao: "saldo", login: $login, token: $token })
+        teste = JSON.parse(sms.body)
+        return teste
     end
 
 
     private
-    def formContactNumber
-        unless @numero.nil?
-            number = @numero.gsub(')', '').gsub('(', '').gsub(' ', '').gsub('-', '') 
-            return numberFormat = "#{number}"
-        else
-            return @numero
-        end    
+    def formContactNumber(numero)
+       # unless numero.nil?
+            numero.gsub(')', '').gsub('(', '').gsub(' ', '').gsub('-', '') 
+            #return numberFormat
+       # else
+       #     return numero
+       # end    
     end
 
 end    

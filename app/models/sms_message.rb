@@ -11,4 +11,14 @@ class SmsMessage < ApplicationRecord
     #, :include => child: {:only =>[:contato, :responsavel]},monitor_user: {:only =>[:name]} }
   end
 
+  def self.getAllSms(u)
+    monitores = MonitorUser.select(:id).where(user_id: u)
+    qnt = 0
+    monitores.each do |monitor| 
+      qnt = qnt + SmsMessage.where(monitor_user: monitor.id).count
+    end  
+    qnt
+
+  end
+
 end
