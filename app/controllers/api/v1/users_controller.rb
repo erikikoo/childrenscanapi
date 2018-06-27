@@ -4,27 +4,24 @@ module Api::V1
     
     skip_before_action :authenticate_request, only: %i[adminLogin appLogin]   
 
-    def appLogin
+    def appLogin      
       
-      if ((authenticate params[:login], params[:password]))
+      #unless (monitor.nil?)
+      if (authenticate params[:login], params[:password])
         
-        #access_number = User.select(:access_count).find_by(login: params[:login])
-        
-        access_number = MonitorUser.select(:access_count).find_by(login: params[:login])          
+        access_number = MonitorUser.find_by(login: params[:login])
         unless (access_number.nil?)
-            if (access_number == 0 )
-            #access_update = (access_number.access_count + 1)        
-            # User.find_by(login: params[:login]).update(access_count: access_update)
-              puts access_number.access_count
+            if (access_number == 0 )            
               return access_number.access_count
             else 
                 access_update = (access_number.access_count + 1)          
                 MonitorUser.find_by(login: params[:login]).update(access_count: access_update)          
             end
-          end  
-        end        
+        end  
+              
       end
-    
+      
+    end
     def adminLogin
       
       if ((authenticate params[:login], params[:password]))
@@ -87,22 +84,28 @@ module Api::V1
     end
 
  
-  def authenticate(login, password)
-      
-      user = User.select(:id, :level, :name, :access_count).find_by(login: login)
-      
-      user = MonitorUser.select(:id, :level, :name, :user_id, :access_count).find_by(login: login) if user.nil?
-      
-      command = AuthenticateUser.call(login, password)
+  def authenticate(login, password)    
     
+    url =  request.original_fullpath.split('/')  
+    
+    #if (url[3] === "app")       
+      user = MonitorUser.select(:id, :level, :name, :user_id, :access_count).find_by(login: login)
+    #else      
+      user = User.select(:id, :level, :name, :access_count).find_by(login: login) if user.nil?
+    #end
+      
+    command = AuthenticateUser.call(login, password) 
+      
       if command.success?
         if (user.access_count > 0)
+          
           render json: {
             id: user.id,
             name: user.name, 
             level: user.level,        
             access_token: command.result,
             message: 'Login realizado com sucesso!'
+            
           }
         else 
             render json: {
