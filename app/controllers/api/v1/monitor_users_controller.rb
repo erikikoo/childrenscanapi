@@ -32,8 +32,8 @@ module Api::V1
       #password_digest = monitor_user_params.password_digest
       @monitor_user.password = monitor_user_params[:password_digest]
       @monitor_user.password_confirmation = monitor_user_params[:password_digest]
-      
-      if @monitor_user.update(monitor_user_params)#@monitor_user.save!
+      #@monitor_user.update(monitor_user_params)#
+      if @monitor_user.save!
         #num = @monitor_user.access_count.to_i + 1
         #@monitor_user.update(access_count: num)
         render json: @monitor_user
