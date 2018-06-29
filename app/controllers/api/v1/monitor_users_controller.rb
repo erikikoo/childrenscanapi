@@ -29,11 +29,11 @@ module Api::V1
 
     # PATCH/PUT /monitor_users/1
     def update
-      #password_digest = monitor_user_params.password_digest
-      @monitor_user.password = monitor_user_params[:password_digest]
-      @monitor_user.password_confirmation = monitor_user_params[:password_digest]
+      #@monitor_user.password_digest = monitor_user_params.password_digest
+      #@monitor_user.password = monitor_user_params[:password_digest]
+      #@monitor_user.password_confirmation = monitor_user_params[:password_digest]
       #@monitor_user.update(monitor_user_params)#
-      if @monitor_user.save!
+      if @monitor_user.update(monitor_user_params)
         #num = @monitor_user.access_count.to_i + 1
         #@monitor_user.update(access_count: num)
         render json: @monitor_user
