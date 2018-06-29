@@ -14,7 +14,7 @@ module Api::V1
       #@sms_messages = SmsMessage.where(user_id: @current_user.id).order(id: :desc).limit(5)
       #@sms_messages = SmsMessage.limit(5)
       #if (@current_user.level <= 2) 
-        @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
+        @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(15)
       
       #end  
       render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}
@@ -37,7 +37,7 @@ module Api::V1
       
        unless child.nil?       
        
-         sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
+        sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
         
         result = JSON.parse(sendSms.sendSmsToApi.body)       
         # #puts GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])
@@ -51,7 +51,7 @@ module Api::V1
              end
         else
                 
-             err = 'teste'#CustomHandleError.handleError(result["cause"])               
+             err = CustomHandleError.handleError(result["cause"])               
              render json: {error: err}
         end      
         

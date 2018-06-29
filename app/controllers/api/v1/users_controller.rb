@@ -27,9 +27,14 @@ module Api::V1
       if ((authenticate params[:login], params[:password]))
         
         access_number = User.select(:access_count).find_by(login: params[:login])
-        access_update = (access_number.access_count + 1)        
-        User.find_by(login: params[:login]).update(access_count: access_update)
-        
+        unless (access_number.nil?)
+          if (access_number == 0 )            
+            return access_number.access_count
+          else 
+            access_update = (access_number.access_count + 1)        
+            User.find_by(login: params[:login]).update(access_count: access_update)
+          end
+        end    
       end  
       
     end
