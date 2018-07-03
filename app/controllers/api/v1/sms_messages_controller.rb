@@ -18,6 +18,25 @@ module Api::V1
       
       #end  
       render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}
+    
+    end
+
+    def sms_search
+        unless params[:nome].nil? || params[:nome] == 'undefined' || params[:nome] == ''
+          search = params[:nome]
+          child = Child.find_by("nome like ?", "%#{search}%")
+        
+          unless child.nil?
+            @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id, child_id: child.id).includes(:monitor_user, :child)        
+            render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}
+          else 
+            render json: {status: 204}
+          end  
+        else 
+          @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child)
+          render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}
+        end
+      
     end
 
     # GET /sms_messages/1

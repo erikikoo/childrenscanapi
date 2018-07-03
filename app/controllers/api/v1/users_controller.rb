@@ -102,26 +102,27 @@ module Api::V1
     command = AuthenticateUser.call(login, password) 
       
       if command.success?
-        if (user.access_count > 0)
+       if (user.access_count > 0)
           
           render json: {
             id: user.id,
             name: user.name, 
             level: user.level,        
             access_token: command.result,
-            message: 'Login realizado com sucesso!'
+            message: 'Login realizado com sucesso!',
+            access_number: user.access_count
             
-          }
-        else 
-            render json: {
-              id: user.id,
-              name: user.name, 
-              level: user.level,        
-              access_token: command.result,
-              message: 'Login realizado com sucesso!',
-              access_number: user.access_count
-            }
-        end
+           }
+         else 
+             render json: {
+               id: user.id,
+               name: user.name, 
+               level: user.level,        
+               access_token: command.result,
+               message: 'Login realizado com sucesso!',
+               access_number: user.access_count
+             }
+         end
         
       else
         render json: { error: command.errors }, status: :unauthorized
