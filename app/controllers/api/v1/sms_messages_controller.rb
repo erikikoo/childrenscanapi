@@ -1,6 +1,6 @@
 module Api::V1
   class SmsMessagesController < ApplicationController
-    #before_action :getAllSms, only: [:index, :create]
+    before_action :getAllSms, only: [:index, :create]
     before_action :set_sms_message, only: [:show, :update, :destroy]
     #skip_before_action :authenticate_request
     #require 'json'
