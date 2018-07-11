@@ -1,8 +1,9 @@
 module Api::V1
   class ChildrenController < ApplicationController
     before_action :authenticate_request
-    before_action :set_child, only: [:show, :update, :destroy]
-    before_action :getAllChildren, only: [:index, :create, :destroy]
+    before_action :set_child, only: [:show, :update, :destroy, :update_status]
+    before_action :getAllChildren, only: [:index, :create, :destroy, :generate_qr_code]
+    
     # GET /children
     def index
       render json: @children, :include => {:user => {:only => :name}}      
@@ -16,7 +17,8 @@ module Api::V1
     # POST /children
     def create
       @child = Child.new(child_params)
-
+      #@child.parentesco = params[:parentesco].to_i
+      #@child.sexo = params[:sexo].to_i
       if @child.save
         render json: @children, status: :created
       else
@@ -38,6 +40,25 @@ module Api::V1
       @child.destroy
     end
 
+    def generate_qr_code      
+      getAllChildrenOfUser(params[:id])
+      render json: @children, :include => {:user => {:only => :name}} 
+    end
+
+    def update_status
+      if @child.status == 'ativo'
+        @child.update(status: 0)
+      elsif @child.status == 'desativado'
+        @child.update(status: 1)
+      end    
+      if @child.save!
+        getAllChildren()
+        render json: @children, :include => {:user => {:only => :name}}
+      else
+        render json: @children.errors, status: :unprocessable_entity
+      end
+    end
+
     private
       
     def getAllChildren
@@ -45,11 +66,17 @@ module Api::V1
       if (@current_user.level == 3) 
         @children = Child.all.order(user_id: :asc)
        else 
-        @children = Child.where(user_id: @current_user)#.includes(:monitor_user)
+        @children = Child.where(user_id: @current_user)
        end
     end
     
-    
+    def getAllChildrenOfUser(id='')
+      unless id
+        @children = Child.where(user_id: @current_user)
+      else
+        @children = Child.where(user_id: id)
+      end
+    end  
     # Use callbacks to share common setup or constraints between actions.
       def set_child
         @child = Child.find(params[:id])
@@ -57,7 +84,7 @@ module Api::V1
 
       # Only allow a trusted parameter "white list" through.
       def child_params
-        params.require(:child).permit(:nome, :contato, :nascimento, :responsavel, :parentesco, :sexo, :status, :user_id)
+        params.require(:child).permit(:name, :contato, :nascimento, :responsavel, :parentesco, :sexo, :status, :user_id)
       end
   end
 end

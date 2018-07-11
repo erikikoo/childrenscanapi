@@ -1,11 +1,13 @@
 class User < ApplicationRecord
-   
+   enum status: [:desativado, :ativo]
+
+
     has_many :monitor_users, dependent: :destroy
     has_many :children, dependent: :destroy
-   
+    has_many :sms_messages, through: :monitor_users
     #Validations
    validates_presence_of :name, :login, :password_digest
-   validates :login, uniqueness: true
+   validates :login, uniqueness: true, case_sensitive: false
  
    #encrypt password
    has_secure_password

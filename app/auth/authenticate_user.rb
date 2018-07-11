@@ -11,8 +11,7 @@ class AuthenticateUser
     end
     
     #this is where the result gets returned
-    def call
-     
+    def call     
       if user        
           JsonWebToken.encode(user_id: user.id )      
       end  
@@ -21,15 +20,26 @@ class AuthenticateUser
     private
   
     def user
+      user = User.find_by(login: login)
+      unless user.nil?
+        if user.status == 'ativo' 
+            return user if user.authenticate(password)
+        else
+            return errors.add :user_authentication, 'Acesso não Autorizado, entre em contato com o suporte!'  
+        end
+      end
+
+      monitor = MonitorUser.find_by(login: login) unless user
+      user = monitor
       
-      user = User.find_by(login: login)            
-      return user if !user.nil? && user.authenticate(password)
-      
-      if user.nil?
-        user = MonitorUser.find_by(login: login)
-        return user if !user.nil? && user.authenticate(password)        
-      end     
-            
+      unless monitor.nil?
+        if monitor.user.status == 'ativo'           
+            return user if  user.authenticate(password)
+        else
+            return errors.add :user_authentication, 'Acesso não Autorizado, entre em contato com o suporte!'  
+        end      
+      end
+
       return errors.add :user_authentication, 'Dados inválidos'
       nil
     

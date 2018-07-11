@@ -13,13 +13,13 @@
 ActiveRecord::Schema.define(version: 2018_06_24_214803) do
 
   create_table "children", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "nome"
+    t.string "name"
     t.string "contato"
     t.date "nascimento"
     t.string "responsavel"
-    t.string "parentesco"
-    t.string "sexo"
-    t.boolean "status", default: true
+    t.integer "parentesco", limit: 1
+    t.integer "sexo", limit: 1
+    t.integer "status", limit: 1, default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 2018_06_24_214803) do
   create_table "sms_messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "monitor_user_id"
     t.bigint "child_id"
+    t.integer "periodo", limit: 1
+    t.integer "acao", limit: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["child_id"], name: "index_sms_messages_on_child_id"
@@ -53,6 +55,7 @@ ActiveRecord::Schema.define(version: 2018_06_24_214803) do
     t.string "contato"
     t.integer "level", default: 2
     t.integer "access_count", default: 0
+    t.integer "status", limit: 1, default: 1
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -9,6 +9,10 @@ Rails.application.routes.draw do
       get 'sms_historico', to: 'sms_messages#app_historico' 
       get 'sms_search', to: 'sms_messages#sms_search'
       put 'change_password', to: 'monitor_users#update'     
+      get 'children/qr-code/:id', to: 'children#generate_qr_code'
+      put 'children/status/:id', to: 'children#update_status'
+      put 'users/status/:id', to: 'users#update_status'
+      
       resources :sms_messages, only: [:index, :show, :create, :destroy]
       resources :monitor_users
       resources :users

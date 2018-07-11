@@ -1,7 +1,14 @@
 class Child < ApplicationRecord
-    has_many :sms_messages, dependent: :destroy
-    
+    has_many :sms_messages, dependent: :destroy    
     belongs_to :user
+    
+    enum parentesco: [:mae, :pai, :outros]
+    enum sexo: [:feminino, :masculino]
+    enum status: [:desativado, :ativo]
+    
+    validates :name, uniqueness: { scope: :contato, case_sensitive: false , message: "Ops!, este nome JÁ ESTÁ CADASTRADO neste número de telefone" }    
+    validates_presence_of :name, :contato, :responsavel, :parentesco, :sexo  
+
     
     def self.allChild(user)
         if user.level === 3

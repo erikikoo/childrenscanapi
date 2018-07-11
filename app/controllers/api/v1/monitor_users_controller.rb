@@ -31,16 +31,32 @@ module Api::V1
     # PATCH/PUT /monitor_users/1
     def update
       #@monitor_user.password = monitor_user_params
-      @monitor_user.password = monitor_user_params[:password_digest]
-      @monitor_user.password_confirmation = monitor_user_params[:password_digest]
+      unless monitor_user_params[:password_digest].nil?
+        @monitor_user.password = monitor_user_params[:password_digest]
+        @monitor_user.password_confirmation = monitor_user_params[:password_digest]
+        if @monitor_user.save!
+          #num = @monitor_user.access_count.to_i + 1
+          #@monitor_user.update(access_count: num)
+          render json: @monitor_user
+        else
+          render json: @monitor_user.errors, status: :unprocessable_entity
+        end  
+      else 
+        @monitor_user.update(monitor_user_params)
+        if @monitor_user.save!
+          render json: @monitor_user
+        else
+          render json: @monitor_user.errors, status: :unprocessable_entity
+        end   
+      end
       #@monitor_user.update(monitor_user_params)#
-      if @monitor_user.save!
+      #if @monitor_user.save!
         #num = @monitor_user.access_count.to_i + 1
         #@monitor_user.update(access_count: num)
-        render json: @monitor_user
-      else
-        render json: @monitor_user.errors, status: :unprocessable_entity
-      end
+      #  render json: @monitor_user
+      #else
+      #  render json: @monitor_user.errors, status: :unprocessable_entity
+      #end
     end
 
     # def change_password

@@ -8,8 +8,7 @@ module Api::V1
       # [...]
       private
       def authenticate_request        
-        @current_user = AuthorizeApiRequest.call(request.headers).result    
-        puts @current_user.level 
+        @current_user = AuthorizeApiRequest.call(request.headers).result            
         render json: { error: 'Acesso negado!' }, status: 401 unless @current_user
       end  
       

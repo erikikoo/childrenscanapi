@@ -1,5 +1,5 @@
 class GenerateSms    
-
+    
     # def initialize(acao, periodo) 
     #     @acao = acao
     #     @periodo = periodo

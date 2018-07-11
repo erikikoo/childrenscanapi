@@ -1,48 +1,25 @@
 module Api::V1
   class UsersController < ApplicationController
-    before_action :set_user, only: [:show, :update, :destroy]
+    before_action :set_user, only: [:show, :update, :destroy, :update_status]
     
     skip_before_action :authenticate_request, only: %i[adminLogin appLogin]   
 
-    def appLogin      
+    def appLogin
       
-      #unless (monitor.nil?)
-      if (authenticate params[:login], params[:password])
-        
-        access_number = MonitorUser.find_by(login: params[:login])
-        unless (access_number.nil?)
-            if (access_number == 0 )            
-              return access_number.access_count
-            else 
-                access_update = (access_number.access_count + 1)          
-                MonitorUser.find_by(login: params[:login]).update(access_count: access_update)          
-            end
-        end  
-              
-      end
+      authenticate params[:login], params[:password]      
       
     end
+    
     def adminLogin
       
-      if ((authenticate params[:login], params[:password]))
-        
-        access_number = User.select(:access_count).find_by(login: params[:login])
-        unless (access_number.nil?)
-          if (access_number == 0 )            
-            return access_number.access_count
-          else 
-            access_update = (access_number.access_count + 1)        
-            User.find_by(login: params[:login]).update(access_count: access_update)
-          end
-        end    
-      end  
-      
+       authenticate params[:login], params[:password]         
+       
     end
     
 
     # GET /users
     def index
-      @users = User.all
+      get_all_users
 
       render json: @users
     end
@@ -72,6 +49,21 @@ module Api::V1
       end
     end
 
+    def update_status
+      if @user.status == 'ativo'
+        @user.update(status: 0)
+      elsif @user.status == 'desativado'
+        @user.update(status: 1)
+      end    
+      if @user.save!
+        get_all_users
+        render json: @users
+      else
+        render json: @user.errors, status: :unprocessable_entity
+      end
+    end
+
+
     # DELETE /users/1
     def destroy
       @user.destroy
@@ -85,49 +77,45 @@ module Api::V1
 
     # Only allow a trusted parameter "white list" through.
     def user_params
-      params.permit(:name, :login, :password, :contato, :level, :id)
+      params.permit(:name, :login, :password, :contato, :level, :id, :user )
     end
 
+    def get_all_users
+      @users = User.all
+    end
  
   def authenticate(login, password)    
+
+      user = MonitorUser.find_by(login: login)
     
-    url =  request.original_fullpath.split('/')  
-    
-    #if (url[3] === "app")       
-      user = MonitorUser.select(:id, :level, :name, :user_id, :access_count).find_by(login: login)
-    #else      
-      user = User.select(:id, :level, :name, :access_count).find_by(login: login) if user.nil?
-    #end
+      user = User.find_by(login: login) if user.nil?       
       
-    command = AuthenticateUser.call(login, password) 
+      command = AuthenticateUser.call(login, password)      
+
       
-      if command.success?
-       if (user.access_count > 0)
+        if command.success? 
+          url =  request.original_fullpath.split('/')          
           
-          render json: {
-            id: user.id,
-            name: user.name, 
-            level: user.level,        
-            access_token: command.result,
-            message: 'Login realizado com sucesso!',
-            access_number: user.access_count
-            
-           }
-         else 
-             render json: {
-               id: user.id,
-               name: user.name, 
-               level: user.level,        
-               access_token: command.result,
-               message: 'Login realizado com sucesso!',
-               access_number: user.access_count
-             }
-         end
-        
-      else
-        render json: { error: command.errors }, status: :unauthorized
-      end
-    
+          access_update = (user.access_count + 1)  
+
+          if (url[3] === "app")                 
+            MonitorUser.find(user.id).update(access_count: access_update) if user
+          else                
+            User.find(user.id).update(access_count: access_update) if user
+          end
+ 
+            render json: {
+                  id: user.id,
+                  name: user.name, 
+                  level: user.level,        
+                  access_token: command.result,
+                  message: 'Login realizado com sucesso!',
+                  access_number: user.access_count
+            }
+        else        
+          render json: { error: command.errors }, status: :unauthorized
+        end
+      
     end   
   end
 end

@@ -16,9 +16,6 @@ class AuthorizeApiRequest
   def user
     @user ||= User.select(:name, :login, :id, :level).find(decoded_auth_token["user_id"]) if decoded_auth_token
     @user ||= MonitorUser.select(:name, :login, :id, :level).find(decoded_auth_token["user_id"]) if decoded_auth_token && @user
-    
-    
-    
     @user || errors.add(:token, 'token inválido') && nil
   end
 

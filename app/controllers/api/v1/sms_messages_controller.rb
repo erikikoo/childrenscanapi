@@ -7,7 +7,7 @@ module Api::V1
     # GET /sms_messages
     def index
       #@sms_messages = SmsMessage.includes(:monitor_user, :child).order('created_at DESC')            
-      render json: @sms_messages, :include => {child: {:only =>[:contato, :responsavel]},monitor_user: {:only =>[:name]}}
+      render json: @sms_messages, :include => {child: {:only =>[:contato, :responsavel, :name]},monitor_user: {:only =>[:name]}}
     end
 
     def app_historico
@@ -17,7 +17,7 @@ module Api::V1
         @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(15)
       
       #end  
-      render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}
+      render json: @sms_messages, :include => {child: {:only =>[:name, :contato]},monitor_user: {:only =>[:name]}}
     
     end
 
@@ -28,13 +28,13 @@ module Api::V1
         
           unless child.nil?
             @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id, child_id: child.id).includes(:monitor_user, :child)        
-            render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}
+            render json: @sms_messages, :include => {child: {:only =>[:name, :contato]},monitor_user: {:only =>[:name]}}
           else 
             render json: {status: 204}
           end  
         else 
           @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child)
-          render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}
+          render json: @sms_messages, :include => {child: {:only =>[:name, :contato]},monitor_user: {:only =>[:name]}}
         end
       
     end
@@ -59,12 +59,12 @@ module Api::V1
         sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
         
         result = JSON.parse(sendSms.sendSmsToApi.body)       
-        # #puts GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])
+       
          if result["status"] == 'success'
              if @sms_message.save! && !child.nil? 
                   @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
           
-                  render json: @sms_messages, :include => {child: {:only =>[:nome, :contato]},monitor_user: {:only =>[:name]}}, status: :created
+                  render json: @sms_messages, :include => {child: {:only =>[:name, :contato]},monitor_user: {:only =>[:name]}}, status: :created
              else
                   render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
              end
@@ -97,7 +97,11 @@ module Api::V1
 
     private
       def getAllSms
-        @sms_messages = SmsMessage.allChild(@current_user)
+        if @current_user.level == 3
+          @sms_messages = SmsMessage.allChild(@current_user)
+        else
+          @sms_messages = User.find(@current_user.id).sms_messages#.where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_month, Time.current )
+        end
       end
     
       # Use callbacks to share common setup or constraints between actions.
@@ -107,7 +111,7 @@ module Api::V1
 
       # Only allow a trusted parameter "white list" through.
       def sms_message_params
-        params.require(:sms_message).permit(:monitor_user_id, :child, :user_id, :status, :msn)
+        params.require(:sms_message).permit(:monitor_user_id, :child, :user_id, :status, :msn, :periodo, :acao)
       end
   end
 end
