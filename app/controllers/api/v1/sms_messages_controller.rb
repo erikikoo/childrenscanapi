@@ -22,9 +22,9 @@ module Api::V1
     end
 
     def sms_search
-        unless params[:nome].nil? || params[:nome] == 'undefined' || params[:nome] == ''
-          search = params[:nome]
-          child = Child.find_by("nome like ?", "%#{search}%")
+        unless params[:name].nil? || params[:name] == 'undefined' || params[:name] == ''
+          search = params[:name]
+          child = Child.find_by("name like ?", "%#{search}%")
         
           unless child.nil?
             @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id, child_id: child.id).includes(:monitor_user, :child)        
@@ -50,7 +50,7 @@ module Api::V1
       
       monitor = MonitorUser.find(@sms_message.monitor_user_id)
       
-      child = Child.find_by(nome: params[:child], user_id: monitor.user_id)
+      child = Child.find_by(name: params[:child], user_id: monitor.user_id)
        
        @sms_message.child_id = child.id if child
       
@@ -58,22 +58,22 @@ module Api::V1
        
         sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
         
-        result = JSON.parse(sendSms.sendSmsToApi.body)       
+        result = JSON.parse(sendSms.sendSmsToApiOSMS.body)       
        
-         if result["status"] == 'success'
-             if @sms_message.save! && !child.nil? 
-                  @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
+        #  if result["status"] == 'ok'
+        #      if @sms_message.save! && !child.nil? 
+        #           @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
           
-                  render json: @sms_messages, :include => {child: {:only =>[:name, :contato]},monitor_user: {:only =>[:name]}}, status: :created
-             else
-                  render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
-             end
-        else
+        #           render json: @sms_messages, :include => {child: {:only =>[:name, :contato]},monitor_user: {:only =>[:name]}}, status: :created
+        #      else
+        #           render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
+        #      end
+        # else
                 
-             err = CustomHandleError.handleError(result["cause"])               
-             render json: {error: err}
-        end      
-        
+        #      err = CustomHandleError.handleError(result["cause"])               
+        #      render json: {error: err}
+        # end      
+              render json: {OSMS: result}
        end
   end
 

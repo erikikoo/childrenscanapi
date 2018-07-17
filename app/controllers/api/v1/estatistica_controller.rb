@@ -7,7 +7,8 @@ module Api::V1
                 sms_send_in_month = SmsMessage.where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_month, Time.current )
                 sms_messages_sending = SmsMessage.count                
                 sms = Sms.new
-                sms_saldo = sms.getSaldo["cause"]
+                #sms_saldo = sms.getSaldoKingsms["body"] #to kingsms
+                sms_saldo = sms.getSaldoOSMS
             else 
                 #sms_messages = SmsMessage.where(user_id: @current_user.id).count
                 sms_messages_sending = SmsMessage.getAllSms(@current_user.id)
@@ -17,7 +18,9 @@ module Api::V1
                 users: users,
                 sms_send_in_month: sms_send_in_month,
                 sms_messages_sending: sms_messages_sending,                
-                sms_saldo: sms_saldo
+                sms_saldo: sms_saldo,
+                empresa_de_sms: 'OSMS'
+                #empresa_de_sms: 'Kingsms'
             }
         end
     end
