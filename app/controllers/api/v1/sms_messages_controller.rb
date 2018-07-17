@@ -58,7 +58,7 @@ module Api::V1
        
         sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
         
-        result = JSON.parse(sendSms.sendSmsToApiOSMS.body)       
+        result = JSON.parse(sendSms.sendSmsToApiOSMS)       
        
         #  if result["status"] == 'ok'
         #      if @sms_message.save! && !child.nil? 

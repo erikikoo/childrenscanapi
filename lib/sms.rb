@@ -34,7 +34,7 @@ class Sms
         $url = 'http://smsadmin.ddns.net/sms/url.src?int=saldo&aplicativo=osms&email='+$email+'&senha='+$senha
         
         sms = HTTP.post($url)
-        return sms.body
+        return sms#.body
     end
 
     # =======================================================================
