@@ -26,7 +26,7 @@ class Sms
     def sendSmsToApiOSMS
         
         $url = "http://smsadmin.ddns.net/sms/url.src"
-        @msn = "teste de envio do app #{Time.now}"
+        # @msn = "teste de envio do app #{Time.now}"
         #?int=send&sms.aplicativo=osms&sms.email="+$email+"&sms.senha="+$senha+"&sms.celular="+formContactNumber(@numero)+"&sms.sms="+@msn 
         sms = HTTP.post($url, :params => { int: 'send', 'sms.aplicativo': 'osms', 'sms.email': $email, 'sms.senha': $senha, 'sms.celular': formContactNumber(@numero), 'sms.sms': @msn})
         return sms
