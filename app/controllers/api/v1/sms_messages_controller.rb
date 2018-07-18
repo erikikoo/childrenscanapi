@@ -51,29 +51,30 @@ module Api::V1
       monitor = MonitorUser.find(@sms_message.monitor_user_id)
       
       child = Child.find_by(name: params[:child], user_id: monitor.user_id)
-       
-       @sms_message.child_id = child.id if child
+      @sms_message.child_id = child.id if child
+      
       
        unless child.nil?       
        
         sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
         
-        result = JSON.parse(sendSms.sendSmsToApiOSMS)       
-       
-        #  if result["status"] == 'ok'
-        #      if @sms_message.save! && !child.nil? 
-        #           @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
+        result = sendSms.sendSmsToApiOSMS
+        
+        if result.status == 200
+             
+              if @sms_message.save! && !child.nil? 
+                   @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
           
-        #           render json: @sms_messages, :include => {child: {:only =>[:name, :contato]},monitor_user: {:only =>[:name]}}, status: :created
-        #      else
-        #           render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
-        #      end
-        # else
+                   render json: @sms_messages, :include => {child: {:only =>[:name, :contato]},monitor_user: {:only =>[:name]}}, status: :created
+              else
+                   render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
+              end
+         else
                 
-        #      err = CustomHandleError.handleError(result["cause"])               
-        #      render json: {error: err}
-        # end      
-              render json: {OSMS: result}
+              err = CustomHandleError.handleError(result["cause"])               
+              render json: {error: err}
+          end      
+              
        end
   end
 

@@ -8,17 +8,17 @@ class GenerateSms
 
     def self.gerar_sms(periodo, acao, aluno)
         msn = ''
-        if (acao == 'Entrada') 
-            if(periodo == 'Manhã' || periodo == 'Matutino') 
+        if (acao == 'entrada') 
+            if(periodo == 'manha' || periodo == 'matutino') 
               msn = "Bom dia, a(o) #{aluno} está conosco em breve estará na escola!"
-             elsif (periodo == 'Vespetino' || periodo == 'Tarde') 
+             elsif (periodo == 'vespetino' || periodo == 'tarde') 
               msn = "Boa Tarde, a(o) #{aluno} está conosco em breve estará na escola!"
              end
         
-        elsif (acao == 'Saída') 
-            if(periodo == 'Manhã' || periodo == 'Matutino') 
+        elsif (acao == 'saida') 
+            if(periodo == 'manha' || periodo == 'matutino') 
               msn = "Bom dia, em breve a(o) #{aluno} estará em casa!"
-            elsif (periodo == 'Vespetino' || periodo == 'Tarde') 
+            elsif (periodo == 'vespetino' || periodo == 'tarde') 
               msn = "Boa Tarde, em breve a(o) #{aluno} estará em casa!"
             end
         end  

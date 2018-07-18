@@ -25,16 +25,18 @@ class Sms
     $senha = 'HayHelena'
     def sendSmsToApiOSMS
         
-        $url = "http://smsadmin.ddns.net/sms/url.src?int=send&sms.aplicativo=osms&sms.email="+$email+"&sms.senha="+$senha+"&sms.celular="+formContactNumber(@numero)+"&sms.sms="+@msn
-        
-        return HTTP.post($url)   
+        $url = "http://smsadmin.ddns.net/sms/url.src"
+        @msn = "teste de envio do app #{Time.now}"
+        #?int=send&sms.aplicativo=osms&sms.email="+$email+"&sms.senha="+$senha+"&sms.celular="+formContactNumber(@numero)+"&sms.sms="+@msn 
+        sms = HTTP.post($url, :params => { int: 'send', 'sms.aplicativo': 'osms', 'sms.email': $email, 'sms.senha': $senha, 'sms.celular': formContactNumber(@numero), 'sms.sms': @msn})
+        return sms
     end
 
     def getSaldoOSMS
         $url = 'http://smsadmin.ddns.net/sms/url.src?int=saldo&aplicativo=osms&email='+$email+'&senha='+$senha
         
         sms = HTTP.post($url)
-        return sms#.body
+        return sms.body
     end
 
     # =======================================================================
