@@ -18,7 +18,7 @@ b = MonitorUser.create!(name: 'Paula Cristina Silva', password: '123456', login:
         rand(1..20).times do
             
             c = Child.create!(name: Faker::Name.name, nascimento: Faker::Date.between(2.days.ago, Date.today), responsavel: Faker::Name.name, parentesco: rand(0..2), sexo: rand(0..1), contato: Faker::Base.numerify('(##) #####-####'), user_id: a.id)
-            
+
             puts "Criando SMS"
             rand(1..15).times do
                 SmsMessage.create!(child_id: c.id, monitor_user_id: b.id, periodo: rand(0..3), acao: rand(0..1))
@@ -59,5 +59,5 @@ end
 puts '==============================================='
 
 
-
+#Child.create!(name: 'Haianny Cristina Silva Souza' , nascimento: '31/07/2012', responsavel: 'Paula Cristina', parentesco: 'mae', sexo: 'feminino', contato: '1194632-1530', user_id: 1)
 

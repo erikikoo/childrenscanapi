@@ -11,8 +11,10 @@ Rails.application.routes.draw do
       put 'change_password', to: 'monitor_users#update'     
       get 'children/qr-code/:id', to: 'children#generate_qr_code'
       put 'children/status/:id', to: 'children#update_status'
-      put 'users/status/:id', to: 'users#update_status'
-      
+      put 'users/status/:id', to: 'users#update_status'      
+      get 'tickets/total', to: 'tickets#total'
+      resources :tickets
+      resources :answers
       resources :sms_messages, only: [:index, :show, :create, :destroy]
       resources :monitor_users
       resources :users

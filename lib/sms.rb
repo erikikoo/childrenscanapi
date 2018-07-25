@@ -29,7 +29,9 @@ class Sms
         # @msn = "teste de envio do app #{Time.now}"
         #?int=send&sms.aplicativo=osms&sms.email="+$email+"&sms.senha="+$senha+"&sms.celular="+formContactNumber(@numero)+"&sms.sms="+@msn 
         sms = HTTP.post($url, :params => { int: 'send', 'sms.aplicativo': 'osms', 'sms.email': $email, 'sms.senha': $senha, 'sms.celular': formContactNumber(@numero), 'sms.sms': @msn})
-        return sms
+        
+        return sms 
+        
     end
 
     def getSaldoOSMS

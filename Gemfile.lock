@@ -59,6 +59,8 @@ GEM
       i18n (>= 0.7)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    groupdate (4.0.1)
+      activesupport (>= 4.2)
     http (3.3.0)
       addressable (~> 2.3)
       http-cookie (~> 1.0)
@@ -152,6 +154,7 @@ DEPENDENCIES
   bootsnap (>= 1.1.0)
   byebug
   faker
+  groupdate
   http
   jwt
   mysql2 (>= 0.4.4, < 0.6.0)

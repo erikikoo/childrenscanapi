@@ -81,7 +81,7 @@ module Api::V1
     end
 
     def get_all_users
-      @users = User.all
+      @users = User.all.order(:id)
     end
  
   def authenticate(login, password)    

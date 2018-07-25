@@ -9,6 +9,8 @@ class Child < ApplicationRecord
     validates :name, uniqueness: { scope: :contato, case_sensitive: false , message: "Ops!, este nome JÁ ESTÁ CADASTRADO neste número de telefone" }    
     validates_presence_of :name, :contato, :responsavel, :parentesco, :sexo  
 
+    # scope :last_child, -> (limit) { where("created_at >= ?", Time.now.to_date).limit(limit) }
+   
     
     def self.allChild(user)
         if user.level === 3

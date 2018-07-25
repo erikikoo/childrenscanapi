@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_24_214803) do
+ActiveRecord::Schema.define(version: 2018_07_23_171024) do
+
+  create_table "answers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "ticket_id"
+    t.text "answer"
+    t.integer "status", limit: 1, default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ticket_id"], name: "index_answers_on_ticket_id"
+  end
 
   create_table "children", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -49,6 +58,16 @@ ActiveRecord::Schema.define(version: 2018_06_24_214803) do
     t.index ["monitor_user_id"], name: "index_sms_messages_on_monitor_user_id"
   end
 
+  create_table "tickets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id", default: 1
+    t.integer "status", limit: 1, default: 1
+    t.string "title"
+    t.text "notification"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_tickets_on_user_id"
+  end
+
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "login"
@@ -61,8 +80,10 @@ ActiveRecord::Schema.define(version: 2018_06_24_214803) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "answers", "tickets"
   add_foreign_key "children", "users"
   add_foreign_key "monitor_users", "users"
   add_foreign_key "sms_messages", "children"
   add_foreign_key "sms_messages", "monitor_users"
+  add_foreign_key "tickets", "users"
 end
