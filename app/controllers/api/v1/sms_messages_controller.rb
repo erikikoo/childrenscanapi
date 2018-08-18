@@ -61,11 +61,13 @@ module Api::V1
           unless (sms_text.nil?)
             message = GenerateSms.replace_aluno(sms_text, child)
             sendSms = Sms.new(child.contato, message)
+            # sendSms = GenerateSms.replace_aluno(sms_text, child)
           else  
             sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
+            # sendSms = GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])
           end    
           
-          
+          # puts sendSms
           result = sendSms.sendSmsToApiOSMS
           
           if result.status == 200
