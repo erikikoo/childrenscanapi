@@ -55,24 +55,32 @@ module Api::V1
       
       
        unless child.nil?       
-       
-        # sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
-        sendSms = Message.find_by(acao: params[:acao], periodo: params[:periodo], user_id: @current_user.id).message_text
-        result = sendSms.sendSmsToApiOSMS if sendSms
         
-        if result.status == 200
-             
-              if @sms_message.save! && !child.nil? 
-                   @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
+          sms_text = Message.find_by(periodo: params[:periodo], acao: params[:acao])
           
-                   render json: @sms_messages, :include => {child: {:only =>[:name, :contato]},monitor_user: {:only =>[:name]}}, status: :created
-              else
-                   render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
-              end
-         else
-                
-              err = CustomHandleError.handleError(result["cause"])               
-              render json: {error: err}
+          if (sms_text)
+            message = GenerateSms.replace_aluno(sms_text, child)
+            sendSms = Sms.new(child.contato, message)
+          else  
+            sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
+          end    
+          
+          
+          result = sendSms.sendSmsToApiOSMS
+          
+          if result.status == 200
+              
+                if @sms_message.save! && !child.nil? 
+                    @sms_messages = SmsMessage.where(monitor_user_id: @current_user.id).includes(:monitor_user, :child).order(id: :desc).limit(5)
+            
+                    render json: @sms_messages, :include => {child: {:only =>[:name, :contato]},monitor_user: {:only =>[:name]}}, status: :created
+                else
+                    render json: @sms_message.errors, error: "Ops!! ocorreu um error a gravar",status: :unprocessable_entity
+                end
+          else
+                  
+                err = CustomHandleError.handleError(result["cause"])               
+                render json: {error: err}
           end      
               
        end
