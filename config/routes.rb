@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       put 'children/status/:id', to: 'children#update_status'
       put 'users/status/:id', to: 'users#update_status'      
       get 'tickets/total', to: 'tickets#total'
+      resources :messages
       resources :tickets
       resources :answers
       resources :sms_messages, only: [:index, :show, :create, :destroy]

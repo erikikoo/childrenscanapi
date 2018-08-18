@@ -56,9 +56,9 @@ module Api::V1
       
        unless child.nil?       
        
-        sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
-        
-        result = sendSms.sendSmsToApiOSMS
+        # sendSms = Sms.new(child.contato, GenerateSms.gerar_sms(params[:periodo], params[:acao], params[:child])) 
+        sendSms = Message.find_by(acao: params[:acao], periodo: params[:periodo], user_id: @current_user.id).message_text
+        result = sendSms.sendSmsToApiOSMS if sendSms
         
         if result.status == 200
              

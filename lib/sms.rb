@@ -60,6 +60,15 @@ class Sms
 
 # ============================================================================
 
+def getSaldoTelleGroup
+    $url = 'http://api.p1.sms.telle.group/integracao.do'
+    
+    sms = HTTP.post($url, :params => {account: '2hesms@2hesms.com', code: '4uCX2Ixr', type: 'C'})
+    return sms.body
+end
+
+
+
     private
     def formContactNumber(numero)
        # unless numero.nil?

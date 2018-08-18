@@ -5,12 +5,14 @@ class User < ApplicationRecord
     has_many :monitor_users, dependent: :destroy
     has_many :children, dependent: :destroy
     has_many :sms_messages, through: :monitor_users
+    has_many :messages, dependent: :destroy
+    
     #Validations
-   validates_presence_of :name, :login, :password_digest
-   validates :login, uniqueness: true, case_sensitive: false
+    validates_presence_of :name, :login, :password_digest
+    validates :login, uniqueness: true, case_sensitive: false
  
-   #encrypt password
-   has_secure_password
+    #encrypt password
+    has_secure_password
 
    
 

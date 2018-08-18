@@ -10,6 +10,7 @@ module Api::V1
                 last_child = Child.where("created_at >= ?", Time.now.to_date).limit(7)
                 ticket = Ticket.where(status: 1).count
                 #sms_saldo = sms.getSaldoKingsms["body"] #to kingsms
+                #sms_saldo = sms.getSaldoTelleGroup
                 sms_saldo = sms.getSaldoOSMS
             else
                 sms_send_in_month = SmsMessage.where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_month, Time.current ).count
