@@ -5,8 +5,7 @@ class GenerateSms
     #     @periodo = periodo
     # end
 
-    def self.replace_aluno(text, aluno)
-        
+    def self.replace_aluno(text, aluno)        
          
             if (aluno.sexo == 'feminino')                
                 

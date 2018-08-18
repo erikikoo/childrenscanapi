@@ -56,9 +56,9 @@ module Api::V1
       
        unless child.nil?       
         
-          sms_text = Message.find_by(periodo: params[:periodo], acao: params[:acao])
+          sms_text = Message.find_by(periodo: params[:periodo], acao: params[:acao], user_id: @current_user.id)
           
-          if (sms_text)
+          unless (sms_text.nil?)
             message = GenerateSms.replace_aluno(sms_text, child)
             sendSms = Sms.new(child.contato, message)
           else  
