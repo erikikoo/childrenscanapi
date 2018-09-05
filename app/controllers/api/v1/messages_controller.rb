@@ -52,7 +52,7 @@ module Api::V1
       end
 
       def getAllMessages
-        @messages = Message.all
+        @messages = Message.where(user_id: @current_user.id)
       end
   end
 end

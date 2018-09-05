@@ -9,10 +9,10 @@ class Sms
 
     # =============================================================================    
     # TO 360NRS
-    #$url = 'https://dashboard.360nrs.com/api/rest/sms' 
     def sendSmsToApi360nrs       
-        $data = '{"to":["5511946344764"],"message":"'+@msn+'","from":"'+@emp+'", "notificationUrl":"'+$urlResponse+'"}'
-        $data = '{"to":["5511946344764"],"message":"'+@msn+'","from":"'+@emp+'", "encoding": "utf-16", "notificationUrl":"'+$urlResponse+'"}'
+        $url = 'https://dashboard.360nrs.com/api/rest/sms' 
+        # $data = '{"to":["5511946344764"],"message":"'+@msn+'","from":"'+@emp+'", "notificationUrl":"'+$urlResponse+'"}'
+        # $data = '{"to":["5511946344764"],"message":"'+@msn+'","from":"'+@emp+'", "encoding": "utf-16", "notificationUrl":"'+$urlResponse+'"}'
         $data = '{"to":["'+formContactNumber+'"],"message":"'+@msn+'","from":"'+@emp+'"}'
         return HTTP.basic_auth(:user => "ErikRdeSouza", :pass => "08121598").post($url, :ssl_context => ctx, :body => $data)
         
@@ -23,7 +23,7 @@ class Sms
     #TO OSMS
     $email = 'erikikoo@hotmail.com'
     $senha = 'HayHelena'
-    def sendSmsToApiOSMS
+    def sendSmsToApiOSMS       
         
         $url = "http://smsadmin.ddns.net/sms/url.src"
         # @msn = "teste de envio do app #{Time.now}"
@@ -37,8 +37,10 @@ class Sms
     def getSaldoOSMS
         $url = 'http://smsadmin.ddns.net/sms/url.src?int=saldo&aplicativo=osms&email='+$email+'&senha='+$senha
         
+        
         sms = HTTP.post($url)
-        return sms.body
+        # return sms.body
+        return sms
     end
 
     # =======================================================================

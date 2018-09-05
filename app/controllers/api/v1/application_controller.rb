@@ -4,7 +4,7 @@ module Api::V1
       attr_accessor :current_user
       
       include ExceptionHandler
-
+    
       # [...]
       private
       def authenticate_request        

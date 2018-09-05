@@ -10,16 +10,18 @@ module Api::V1
                 last_child = Child.where("created_at >= ?", Time.now.to_date).limit(7)
                 ticket = Ticket.where(status: 1).count
                 #sms_saldo = sms.getSaldoKingsms["body"] #to kingsms
-                #sms_saldo = sms.getSaldoTelleGroup
-                sms_saldo = sms.getSaldoOSMS
+                #sms_saldo = sms.getSaldoTelleGroup                
+                sms_saldo = sms.getSaldoOSMS.body
+                # sms.getSaldoOSMS.status == 500 ? sms_saldo = 0 : sms_saldo = sms.getSaldoOSMS 
             else
-                sms_send_in_month = SmsMessage.where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_month, Time.current ).count
+                # sms_send_in_month = User.find(@current_user.id).sms_messages.where(created_at: Time.current.beginning_of_month..Time.current).count
                 children = Child.where(status: 1, user_id: @current_user.id).count                 
                 # ticket = Ticket.joins("INNER JOIN answers ON answers.ticket_id = tickets.id AND answers.status = '0'").count
                 # User.joins("INNER Join monitor_users ON monitor_users.user_id = users.id INNER Join  ")
-                
+                # User.find(2).sms_messages.where(created_at: (Time.current.beginning_of_month..Time.current )).count
+                sms_send_in_month = User.find(@current_user.id).sms_messages.where(created_at: (Time.current.beginning_of_month..Time.current )).count
                 #sms_messages = SmsMessage.where(user_id: @current_user.id).count
-                sms_messages_sending = SmsMessage.getAllSms(@current_user.id)
+                sms_messages_sending = User.find(@current_user.id).sms_messages.count
                 
             end    
             render json: {

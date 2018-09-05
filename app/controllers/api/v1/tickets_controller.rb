@@ -16,7 +16,7 @@ module Api::V1
     # POST /tickets
     def create
       @ticket = Ticket.new(ticket_params)
-
+      @ticket.user_id = @current_user.id
       if @ticket.save!
         getAllTickets()
         render json: @tickets, status: :created, :include => {user: {:only =>[:name]}, answers: {:only =>[:answer]}}
@@ -64,7 +64,7 @@ module Api::V1
         if @current_user.level == 3
           @tickets = Ticket.includes(:user).order(created_at: :desc)
         else  
-          @tickets = Ticket.includes(:user).where(user_id: @current_user.id)
+          @tickets = Ticket.includes(:user).where(user_id: @current_user.id).order(status: :desc)
         end  
       end
   end
