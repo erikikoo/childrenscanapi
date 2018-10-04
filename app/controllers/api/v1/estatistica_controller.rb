@@ -4,7 +4,7 @@ module Api::V1
             if @current_user.level === 3
                 children = Child.where(status: 1).count
                 users = User.count
-                sms_send_in_month = SmsMessage.where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_month, Time.current ).count
+                sms_send_in_month = SmsMessage.where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_month, Time.current ).count               
                 sms_messages_sending = SmsMessage.count                
                 sms = Sms.new
                 last_child = Child.where("created_at >= ?", Time.now.to_date).limit(7)

@@ -102,7 +102,15 @@ module Api::V1
       @sms_message.destroy
     end
 
-    
+    def get_sms_per_month_and_user
+      @sms_per_month_and_user = SmsMessage.where(created_at: (Time.current.beginning_of_month..Time.current )).joins(:monitor_user).group('user_id').count('monitor_user_id')      
+      render json: @sms_per_month_and_user
+    end
+
+    def get_all_sms_per_user
+      @all_sms_per_user = SmsMessage.joins(:monitor_user).group('user_id').count('monitor_user_id').to_json      
+      render json: @all_sms_per_user
+    end
      
     
 

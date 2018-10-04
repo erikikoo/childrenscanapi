@@ -20,7 +20,8 @@ module Api::V1
     # POST /monitor_users
     def create
       @monitor_user = MonitorUser.new(monitor_user_params)
-
+      @monitor_user.password = monitor_user_params[:password_digest]
+      @monitor_user.password_confirmation = monitor_user_params[:password_digest]
       if @monitor_user.save!
         render json: @monitor_user, status: :created
       else
