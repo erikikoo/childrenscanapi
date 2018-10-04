@@ -51,6 +51,7 @@ module Api::V1
       monitor = MonitorUser.find(@sms_message.monitor_user_id)
       
       child = Child.find_by(name: params[:child], user_id: monitor.user_id)
+      
       @sms_message.child_id = child.id if child
       
       

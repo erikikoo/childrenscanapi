@@ -11,52 +11,52 @@ puts "Criando Usuario"
     
 a = User.create!(name: "Erik R de Souza", password: 'HayHelena', login: 'erikikoo@hotmail.com', contato: Faker::Base.numerify('(##) #####-####'), level: 3)
 
-puts "Criando Monitor"     
-b = MonitorUser.create!(name: 'Paula Cristina Silva', password: '123456', login: 'paulinha', user_id: a.id)
+# puts "Criando Monitor"     
+# b = MonitorUser.create!(name: 'Paula Cristina Silva', password: '123456', login: 'paulinha', user_id: a.id)
         
-        puts 'Criando Crianças'
-        rand(1..20).times do
+#         puts 'Criando Crianças'
+#         rand(1..20).times do
             
-            c = Child.create!(name: Faker::Name.name, nascimento: Faker::Date.between(2.days.ago, Date.today), responsavel: Faker::Name.name, parentesco: rand(0..2), sexo: rand(0..1), contato: Faker::Base.numerify('(##) #####-####'), user_id: a.id)
+#             c = Child.create!(name: Faker::Name.name, nascimento: Faker::Date.between(2.days.ago, Date.today), responsavel: Faker::Name.name, parentesco: rand(0..2), sexo: rand(0..1), contato: Faker::Base.numerify('(##) #####-####'), user_id: a.id)
 
-            puts "Criando SMS"
-            rand(1..15).times do
-                SmsMessage.create!(child_id: c.id, monitor_user_id: b.id, periodo: rand(0..3), acao: rand(0..1))
-                puts 'Usuario SMS'
-            end
-            puts 'Crianças criadas'
-        end    
-    puts 'monitor criado '
+#             puts "Criando SMS"
+#             rand(1..15).times do
+#                 SmsMessage.create!(child_id: c.id, monitor_user_id: b.id, periodo: rand(0..3), acao: rand(0..1))
+#                 puts 'Usuario SMS'
+#             end
+#             puts 'Crianças criadas'
+#         end    
+#     puts 'monitor criado '
 
-5.times do    
-    a = User.create!(name: Faker::Name.name, password: '123456', login: Faker::Internet.email, contato: Faker::Base.numerify('(##) #####-####'))
+# 5.times do    
+#     a = User.create!(name: Faker::Name.name, password: '123456', login: Faker::Internet.email, contato: Faker::Base.numerify('(##) #####-####'))
     
-    puts "Criando Monitor"    
-    5.times do
-        b = MonitorUser.create!(name: Faker::Name.name, password: '123456', login: Faker::Name.name, user_id: a.id)
+#     puts "Criando Monitor"    
+#     5.times do
+#         b = MonitorUser.create!(name: Faker::Name.name, password: '123456', login: Faker::Name.name, user_id: a.id)
         
-        puts 'Criando Crianças'
-        rand(1..20).times do
+#         puts 'Criando Crianças'
+#         rand(1..20).times do
             
-            c = Child.create!(name: Faker::Name.name, nascimento: Faker::Date.between(2.days.ago, Date.today), responsavel: Faker::Name.name, parentesco: rand(0..2), sexo: rand(0..1), contato: Faker::Base.numerify('(##) #####-####'), user_id: a.id)
+#             c = Child.create!(name: Faker::Name.name, nascimento: Faker::Date.between(2.days.ago, Date.today), responsavel: Faker::Name.name, parentesco: rand(0..2), sexo: rand(0..1), contato: Faker::Base.numerify('(##) #####-####'), user_id: a.id)
             
-            puts "Criando SMS"
-            rand(1..15).times do
-                SmsMessage.create!(child_id: c.id, monitor_user_id: b.id, periodo: rand(0..3), acao: rand(0..1))
-                puts 'Usuario SMS'
-            end
-            puts 'Crianças criadas'
-        end    
-    puts 'monitor criado '
+#             puts "Criando SMS"
+#             rand(1..15).times do
+#                 SmsMessage.create!(child_id: c.id, monitor_user_id: b.id, periodo: rand(0..3), acao: rand(0..1))
+#                 puts 'Usuario SMS'
+#             end
+#             puts 'Crianças criadas'
+#         end    
+#     puts 'monitor criado '
         
     
-    end  
+#     end  
 
     
-end    
+# end    
 
 
-puts '==============================================='
+# puts '==============================================='
 
 
 #Child.create!(name: 'Haianny Cristina Silva Souza' , nascimento: '31/07/2012', responsavel: 'Paula Cristina', parentesco: 'mae', sexo: 'feminino', contato: '1194632-1530', user_id: 1)
