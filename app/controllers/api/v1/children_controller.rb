@@ -18,7 +18,7 @@ module Api::V1
     def getChildrenPerUidDevice
       # if params[:uid] != 'undefined' 
         find_child_per_device(params[:uid])
-        render json: @children#, :include => {:user => {:only => :name}}      
+        render json: @children, :include => {:user => {:only => :name}}      
       # end
     end
 
@@ -126,8 +126,8 @@ module Api::V1
     end
 
     def find_child_per_device(uid)      
-      @children = Device.find_by(uid: uid)
-      @children.children if @children
+      child = Device.find_by(uid: uid)
+      return @children.children if child
     end  
       
     def getAllChildren
