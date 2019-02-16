@@ -16,10 +16,10 @@ module Api::V1
     end
 
     def getChildrenPerUidDevice
-      # if params[:uid] != 'undefined' 
+      if params[:uid] != 'undefined' 
         find_child_per_device(params[:uid])
         render json: @children, :include => {:user => {:only => :name}}      
-      # end
+      end
     end
 
     # GET /children/1
@@ -30,8 +30,7 @@ module Api::V1
     # POST /children
     def create
       
-        @child = Child.new(child_params)
-        @child.name = @child.name.downcase!           
+        @child = Child.new(child_params)           
         params_uid = child_params[:devices_attributes][0][:uid]
         #verifica se existe a criança
         # checkChild = Child.find_by(name: @child.name, nascimento: @child.nascimento)
@@ -121,13 +120,10 @@ module Api::V1
 
     private
 
-    def nameToLowerCase name
-      return name.downcase!
-    end
 
-    def find_child_per_device(uid)      
+    def find_child_per_device(uid)
       child = Device.find_by(uid: uid)
-      return @children.children if child
+      @children = child.children if child
     end  
       
     def getAllChildren
