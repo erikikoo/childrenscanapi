@@ -123,7 +123,7 @@ module Api::V1
 
     def find_child_per_device(uid)
       child = Device.find_by(uid: uid)
-      @children = child.children if child
+      @children = child.children.capitalize if child
     end  
       
     def getAllChildren
