@@ -69,16 +69,19 @@ module Api::V1
       def getEventsReadPerDevice(uid = nil)
         
         if uid
-          @device_id = Device.find_by(uid: uid).id 
+          @device_id = Device.find_by(uid: uid) 
         else  
-          @device_id = Device.find_by(uid: params[:uid]).id 
+          @device_id = Device.find_by(uid: params[:uid])
         end 
 
         @ev_id = Event.select(:id)      
         val = 0
-        @ev_id.each do |evid|
-          ev_device = EventDevice.find_by(event_id: evid, device_id: @device_id)
-          val = val + 1 if ev_device.nil?
+        
+        if @device_id and @ev_id
+          @ev_id.each do |evid|
+            ev_device = EventDevice.find_by(event_id: evid, device_id: @device_id.id)
+            val = val + 1 if ev_device.nil?
+          end
         end
         return val
       end

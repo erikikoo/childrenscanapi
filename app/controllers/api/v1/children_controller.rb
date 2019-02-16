@@ -121,8 +121,9 @@ module Api::V1
     private
 
 
-    def find_child_per_device(uid)
-      @children = Device.find_by(uid: uid).children
+    def find_child_per_device(uid)      
+      @children = Device.find_by(uid: uid)
+      @children.children if @children
     end  
       
     def getAllChildren
