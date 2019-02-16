@@ -30,7 +30,8 @@ module Api::V1
     # POST /children
     def create
       
-        @child = Child.new(child_params)           
+        @child = Child.new(child_params)
+        @child.name = @child.name.downcase!           
         params_uid = child_params[:devices_attributes][0][:uid]
         #verifica se existe a criança
         # checkChild = Child.find_by(name: @child.name, nascimento: @child.nascimento)
@@ -120,6 +121,9 @@ module Api::V1
 
     private
 
+    def nameToLowerCase name
+      return name.downcase!
+    end
 
     def find_child_per_device(uid)      
       @children = Device.find_by(uid: uid)
