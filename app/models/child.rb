@@ -1,13 +1,20 @@
 class Child < ApplicationRecord
-    has_many :sms_messages, dependent: :destroy    
     belongs_to :user
     
-    enum parentesco: [:mae, :pai, :outros]
+    has_many :notifications, dependent: :destroy
+    
+    has_many :device_children
+    has_many :devices, through: :device_children
+
+    # has_many :notification_devices    
+    accepts_nested_attributes_for :devices, :allow_destroy => true
+    
     enum sexo: [:feminino, :masculino]
     enum status: [:desativado, :ativo]
     
-    validates :name, uniqueness: { scope: :contato, case_sensitive: false , message: "Ops!, este nome JÁ ESTÁ CADASTRADO neste número de telefone" }    
-    validates_presence_of :name, :contato, :responsavel, :parentesco, :sexo  
+    # validates :name, uniqueness: { scope: :contato, case_sensitive: false , message: "Ops!, este nome JÁ ESTÁ CADASTRADO neste número de telefone" }    
+    validates_presence_of :name, :contato, :responsavel, :sexo  
+
 
     # scope :last_child, -> (limit) { where("created_at >= ?", Time.now.to_date).limit(limit) }
    

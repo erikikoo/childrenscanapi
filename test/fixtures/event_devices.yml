@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  event: one
+  device: one
+  visited: MyString
+
+two:
+  event: two
+  device: two
+  visited: MyString

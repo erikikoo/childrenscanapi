@@ -1,6 +1,6 @@
 class CustomHandleError
 
-    def self.handleError(error)
+    def self.error(error)
         case error
 
             when "Action Not Informed OR Invalid"

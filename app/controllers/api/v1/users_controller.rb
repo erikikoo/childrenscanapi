@@ -81,37 +81,54 @@ module Api::V1
     end
 
     def get_all_users
-      @users = User.all.order(:id)
+      @users = User.where.not(level: 3).order(:id)
     end
  
   def authenticate(login, password)    
 
       user = MonitorUser.find_by(login: login)
-    
+
+      user.nil? ? $isMonitor = false : $isMonitor = true
+
       user = User.find_by(login: login) if user.nil?       
       
       command = AuthenticateUser.call(login, password)      
 
       
         if command.success? 
-          url =  request.original_fullpath.split('/')          
-          
-          access_update = (user.access_count + 1)  
+            url =  request.original_fullpath.split('/')          
+            
+            access_update = (user.access_count + 1)  
 
-          if (url[3] === "app")                 
-            MonitorUser.find(user.id).update(access_count: access_update) if user
-          else                
-            User.find(user.id).update(access_count: access_update) if user
-          end
- 
-            render json: {
-                  id: user.id,
-                  name: user.name, 
-                  level: user.level,        
-                  access_token: command.result,
-                  message: 'Login realizado com sucesso!',
-                  access_number: user.access_count
-            }
+            if (url[3] === "app")                 
+              MonitorUser.find(user.id).update(access_count: access_update) if user
+            else                
+              User.find(user.id).update(access_count: access_update) if user
+            end
+            
+            
+            if $isMonitor
+            
+                render json: {
+                      id: user.id,
+                      user_id: user.user_id, 
+                      name: user.name, 
+                      level: user.level,        
+                      access_token: command.result,
+                      message: 'Login realizado com sucesso!',
+                      access_number: user.access_count
+                  }             
+            else 
+              render json: {
+                      id: user.id,
+                      # user_id: $user_id, 
+                      name: user.name, 
+                      level: user.level,        
+                      access_token: command.result,
+                      message: 'Login realizado com sucesso!',
+                      access_number: user.access_count
+                  }             
+            end
         else        
           render json: { error: command.errors }, status: :unauthorized
         end

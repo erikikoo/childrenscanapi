@@ -4,8 +4,7 @@ class CreateChildren < ActiveRecord::Migration[5.2]
       t.string :name
       t.string :contato
       t.date :nascimento
-      t.string :responsavel
-      t.integer :parentesco, limit: 1
+      t.string :responsavel      
       t.integer :sexo, limit: 1      
       t.integer :status, limit: 1, default: 1
 
@@ -13,3 +12,5 @@ class CreateChildren < ActiveRecord::Migration[5.2]
     end
   end
 end
+
+

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_14_213711) do
+ActiveRecord::Schema.define(version: 2019_02_13_185551) do
 
   create_table "answers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "ticket_id"
@@ -26,13 +26,55 @@ ActiveRecord::Schema.define(version: 2018_08_14_213711) do
     t.string "contato"
     t.date "nascimento"
     t.string "responsavel"
-    t.integer "parentesco", limit: 1
     t.integer "sexo", limit: 1
     t.integer "status", limit: 1, default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["user_id"], name: "index_children_on_user_id"
+  end
+
+  create_table "contatos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "telefone"
+    t.string "email"
+    t.string "url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "device_children", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "child_id"
+    t.bigint "device_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_id"], name: "index_device_children_on_child_id"
+    t.index ["device_id"], name: "index_device_children_on_device_id"
+  end
+
+  create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "uid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "event_devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "event_id"
+    t.bigint "device_id"
+    t.integer "visited", limit: 1, default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["device_id"], name: "index_event_devices_on_device_id"
+    t.index ["event_id"], name: "index_event_devices_on_event_id"
+  end
+
+  create_table "events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "title"
+    t.text "message_text"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "summary"
+    t.index ["user_id"], name: "index_events_on_user_id"
   end
 
   create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -57,15 +99,23 @@ ActiveRecord::Schema.define(version: 2018_08_14_213711) do
     t.index ["user_id"], name: "index_monitor_users_on_user_id"
   end
 
-  create_table "sms_messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "monitor_user_id"
+  create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "notification_id"
+    t.bigint "user_id"
     t.bigint "child_id"
-    t.integer "periodo", limit: 1
-    t.integer "acao", limit: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["child_id"], name: "index_sms_messages_on_child_id"
-    t.index ["monitor_user_id"], name: "index_sms_messages_on_monitor_user_id"
+    t.index ["child_id"], name: "index_notifications_on_child_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "prices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.float "value"
+    t.bigint "user_id"
+    t.date "date_current"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_prices_on_user_id"
   end
 
   create_table "tickets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -92,9 +142,15 @@ ActiveRecord::Schema.define(version: 2018_08_14_213711) do
 
   add_foreign_key "answers", "tickets"
   add_foreign_key "children", "users"
+  add_foreign_key "device_children", "children"
+  add_foreign_key "device_children", "devices"
+  add_foreign_key "event_devices", "devices"
+  add_foreign_key "event_devices", "events"
+  add_foreign_key "events", "users"
   add_foreign_key "messages", "users"
   add_foreign_key "monitor_users", "users"
-  add_foreign_key "sms_messages", "children"
-  add_foreign_key "sms_messages", "monitor_users"
+  add_foreign_key "notifications", "children"
+  add_foreign_key "notifications", "users"
+  add_foreign_key "prices", "users"
   add_foreign_key "tickets", "users"
 end

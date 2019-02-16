@@ -11,8 +11,8 @@ puts "Criando Usuario"
     
 a = User.create!(name: "Erik R de Souza", password: 'HayHelena', login: 'erikikoo@hotmail.com', contato: Faker::Base.numerify('(##) #####-####'), level: 3)
 
-# puts "Criando Monitor"     
-# b = MonitorUser.create!(name: 'Paula Cristina Silva', password: '123456', login: 'paulinha', user_id: a.id)
+puts "Criando Monitor"     
+b = MonitorUser.create!(name: 'Paula Cristina Silva', password: '123456', login: 'paulinha', user_id: a.id)
         
 #         puts 'Criando Crianças'
 #         rand(1..20).times do

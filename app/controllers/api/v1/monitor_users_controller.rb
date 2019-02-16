@@ -84,6 +84,15 @@ module Api::V1
       @monitor_user.destroy
     end
 
+    def countMonitor
+        qnt = MonitorUser.where(user_id: @current_user).count
+        # if qnt
+          render json: { monitor_count: qnt }
+        # else
+        #   render json: {message: 'Ops! ocorreu um error'}  
+        # end
+    end
+
     private
       def getAllMonitor
         @monitor_users = MonitorUser.allMonitor(@current_user)

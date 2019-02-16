@@ -1,12 +1,25 @@
 module Api::V1
   class ChildrenController < ApplicationController
-    before_action :authenticate_request
+    # before_action :authenticate_request
     before_action :set_child, only: [:show, :update, :destroy, :update_status]
-    before_action :getAllChildren, only: [:index, :create, :destroy, :generate_qr_code]
+    # before_action :getAllChildren, only: [:index, :create, :destroy, :generate_qr_code]
+    before_action :getAllChildren, only: [:index, :destroy, :generate_qr_code]
+    skip_before_action :authenticate_request, only: [:getChildrenPerUidDevice, :create]
     
     # GET /children
     def index
-      render json: @children, :include => {:user => {:only => :name}}      
+      # if params[:uid] != 'undefined'         
+      #   find_child_per_device(params[:uid]) 
+        
+        render json: @children, :include => {:user => {:only => :name}}      
+      # end
+    end
+
+    def getChildrenPerUidDevice
+      if params[:uid] != 'undefined' 
+        find_child_per_device(params[:uid])
+        render json: @children, :include => {:user => {:only => :name}}      
+      end
     end
 
     # GET /children/1
@@ -16,14 +29,59 @@ module Api::V1
 
     # POST /children
     def create
-      @child = Child.new(child_params)
-      #@child.parentesco = params[:parentesco].to_i
-      #@child.sexo = params[:sexo].to_i
-      if @child.save
-        render json: @children, status: :created
-      else
-        render json: @child.errors, status: :unprocessable_entity,  message: 'Aluno cadastrado com sucesso!'
-      end
+      
+        @child = Child.new(child_params)           
+        params_uid = child_params[:devices_attributes][0][:uid]
+        #verifica se existe a criança
+        # checkChild = Child.find_by(name: @child.name, nascimento: @child.nascimento)
+        checkChild = CheckChild.existChildPerNameAndNasc?(@child.name, @child.nascimento) 
+        #se existir criança
+        if checkChild
+          
+          #checa se existe o device
+          unless CheckDevice.existDevicePerUid?(params_uid)
+            # checkDevice = Device.find_by(uid: @child.devices_attributes[:uid])
+            #se exitir a criança cadastrada e não existir o device cadastrado cria o device       
+            
+            #cria o device
+            device = Device.create!(uid: params_uid)
+            
+            #o relaciona com a crianca
+            DeviceChild.create!(device_id: device.id, child_id: checkChild.id)
+
+            find_child_per_device(device.uid)
+
+            render json: {device_id: device.uid, status: :created,  message: 'Dispositivo cadastrado com sucesso!'}
+          else
+            render json: {status: :unprocessable_entity, message: 'Dispositivo já cadastrado!'}
+          end
+
+        else
+
+          #se existir o dispositivo
+          device = CheckDevice.existDevicePerUid?(params_uid)        
+          if device            
+              user = 1
+              
+              child = Child.create!(name: @child.name, contato: @child.contato ,nascimento: @child.nascimento, responsavel: @child.responsavel, sexo: @child.sexo, user_id: user)
+              if child
+                DeviceChild.create!(device_id: device.id, child_id: child.id)
+                render json: {device_id: device.uid, status: :created,  message: 'Criança cadastrado com sucesso!'}
+              else
+                render json: child.errors, status: :unprocessable_entity, message: 'Ops, erro ao cadastrar esta criança'
+              end    
+          else
+            @child.user_id = 1
+            if @child.save!              
+              # @children = Child.last
+              render json: {device_id: params_uid, status: :created,  message: 'Aluno e dispositivo cadastrado com sucesso!'}
+            else                    
+              render json: @child.errors, status: :unprocessable_entity, message: 'Ops, error ao cadastrar esta criança e dispositivo'
+            end
+          end
+          
+        end
+       
     end
 
     # PATCH/PUT /children/1
@@ -61,6 +119,11 @@ module Api::V1
 
 
     private
+
+
+    def find_child_per_device(uid)
+      @children = Device.find_by(uid: uid).children
+    end  
       
     def getAllChildren
       #monitor = User.find(@current_user)
@@ -84,8 +147,11 @@ module Api::V1
       end
 
       # Only allow a trusted parameter "white list" through.
-      def child_params
-        params.require(:child).permit(:name, :contato, :nascimento, :responsavel, :parentesco, :sexo, :status, :user_id)
+      def child_params        
+        
+        params.require(:child).permit(:name, :contato, :nascimento, :responsavel, :sexo, :status, devices_attributes: [:uid] )
       end
   end
 end
+
+#, notification_devices_attributes: [:device_id] )

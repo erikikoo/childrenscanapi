@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  texto: MyText
+  notification_id: MyString
+  child: one
+  periodo: MyString
+  acao: MyString
+
+two:
+  texto: MyText
+  notification_id: MyString
+  child: two
+  periodo: MyString
+  acao: MyString
