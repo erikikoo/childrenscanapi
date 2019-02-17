@@ -16,6 +16,6 @@ class MonitorUser < ApplicationRecord
     else
         MonitorUser.includes(:user).where(user_id: user.id).order('id DESC')
     end
-end
+  end
   
 end

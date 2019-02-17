@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_185551) do
     t.string "notification_id"
     t.bigint "user_id"
     t.bigint "child_id"
+    t.integer "visited", limit: 1, default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["child_id"], name: "index_notifications_on_child_id"

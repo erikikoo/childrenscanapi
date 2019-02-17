@@ -13,7 +13,9 @@ module Api::V1
       @notifications = []
       
       child = Child.find(params[:id])
-      notification_ids = child.notifications.where("created_at >= ?", Date.current)
+      notification_ids = child.notifications.where("created_at >= ?", Date.current).order(created_at: :DESC)
+      
+      child.notifications.update(visited: :yes)
       
       notification_ids.each do |n|
         @notifications  << {child_name: child.name, created_at: n.created_at, mensagem: PushNotification.getNotifications(n.notification_id)['contents']['en']}
@@ -28,6 +30,7 @@ module Api::V1
       periodo = params[:setup][:periodo]
       acao = params[:setup][:acao]
       child = CheckChild.hasChild?(params[:setup][:child])
+     
       
       if child
         devices_id = []  
@@ -82,16 +85,10 @@ module Api::V1
 
       sending = PushNotification.sendNotificationForAllDevices($evento_message) if $evento_message
 
-      if sending
-        puts '======================='
-        puts 'Enviado'
-        puts '======================='
+      if sending        
         render json: {status: 200, message: "Notificação enviada para todos os celulares cadastrados!"}  
-      else
-        puts '======================='
-        puts 'Erro'
-        puts '======================='
-        render json: {status: 404, message: "Ops, não foi possível enviar a notificação"}
+      else        
+        render json: {status: 404, message: "Ops!!, não foi possível enviar a notificação"}
       end
     end
 
