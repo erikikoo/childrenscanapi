@@ -31,6 +31,7 @@ module Api::V1
     def create
       
         @child = Child.new(child_params)           
+        @child.name = @child.name.downcase!
         params_uid = child_params[:devices_attributes][0][:uid]
         #verifica se existe a criança
         # checkChild = Child.find_by(name: @child.name, nascimento: @child.nascimento)

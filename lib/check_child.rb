@@ -13,5 +13,4 @@ class CheckChild
 
         false
     end
-
 end
