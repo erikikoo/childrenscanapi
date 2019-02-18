@@ -1,7 +1,7 @@
 class CheckChild
 
     def self.existChildPerNameAndNasc? name, nasc
-        child = Child.find_by(name: name.downcase, nascimento: nasc)
+        child = Child.find_by(name: name.downcase!, nascimento: nasc)
         return child if child
             
         return false

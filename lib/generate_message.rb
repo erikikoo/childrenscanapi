@@ -2,7 +2,7 @@ class GenerateMessage
 
     def self.replace_aluno(text, aluno)        
 
-        name = aluno.name.capitalize!
+        name = aluno.name
             if (aluno.sexo == 'feminino')                
                 
                 if (text.include? "o aluno") 
@@ -25,7 +25,7 @@ class GenerateMessage
     end
 
     def self.gerar(periodo, acao, aluno)
-        name = aluno.name.capitalize!
+        name = aluno.name
         msn = ''
         if (acao == 'entrada') 
             if(periodo == 'manha' || periodo == 'matutino') 

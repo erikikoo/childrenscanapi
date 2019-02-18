@@ -29,7 +29,7 @@ module Api::V1
       
       periodo = params[:setup][:periodo]
       acao = params[:setup][:acao]
-      child = CheckChild.hasChild?(params[:setup][:child].downcase)
+      child = CheckChild.hasChild?(params[:setup][:child])
      
       
       if child
