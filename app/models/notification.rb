@@ -4,8 +4,8 @@ class Notification < ApplicationRecord
   enum visited: [:no, :yes]
   
 
-  def self.countNotification(child)
-    Notification.where(child_id: child).count
+  def self.countNotification(child)    
+    Notification.where(child_id: child, visited: :no).count
   end
 
   
