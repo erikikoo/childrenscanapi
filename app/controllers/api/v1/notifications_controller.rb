@@ -44,7 +44,7 @@ module Api::V1
         
         message = GenerateMessage.replace_aluno(message.message_text, child) if message
 
-        message = GenerateMessage.gerar(periodo, acao, child) unless message
+        # message = GenerateMessage.gerar(periodo, acao, child) unless message
         
         notification_response = PushNotification.send(devices_id, message)        
         
