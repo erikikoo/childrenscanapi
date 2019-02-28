@@ -27,6 +27,7 @@ module Api::V1
     def create    
       notification = Notification.new(notification_params)
       
+      user_id = params[:notification][:user_id]
       periodo = params[:setup][:periodo]
       acao = params[:setup][:acao]
       child = CheckChild.hasChild?(params[:setup][:child])
@@ -40,11 +41,11 @@ module Api::V1
           devices_id << d.uid          
         end
         
-        message = Message.find_by(periodo: periodo, acao: acao)
+        message = Message.find_by(periodo: periodo, acao: acao, user_id: user_id)
         
         message = GenerateMessage.replace_aluno(message.message_text, child) if message
 
-        # message = GenerateMessage.gerar(periodo, acao, child) unless message
+        message = GenerateMessage.gerar(periodo, acao, child) unless message
         
         notification_response = PushNotification.send(devices_id, message)        
         
