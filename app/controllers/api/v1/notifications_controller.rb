@@ -30,8 +30,9 @@ module Api::V1
       user_id = params[:notification][:user_id]
       periodo = params[:setup][:periodo]
       acao = params[:setup][:acao]
+
       child = CheckChild.hasChild?(params[:setup][:child])
-     
+      
       
       if child
         devices_id = []  
@@ -41,11 +42,14 @@ module Api::V1
           devices_id << d.uid          
         end
         
-        message = Message.find_by(periodo: periodo, acao: acao, user_id: user_id)
+        customMessage = Message.find_by(periodo: periodo, acao: acao, user_id: user_id)
         
-        message = GenerateMessage.replace_aluno(message.message_text, child) if message
-
-        message = GenerateMessage.gerar(periodo, acao, child) unless message
+        if customMessage          
+          message = GenerateMessage.replace_aluno(customMessage.message_text, child)
+        else
+          message = GenerateMessage.gerar(periodo, acao, child)
+        end
+        
         
         notification_response = PushNotification.send(devices_id, message)        
         
@@ -110,7 +114,7 @@ module Api::V1
 
       # Only allow a trusted parameter "white list" through.
       def notification_params
-        params.require(:notification).permit(:user_id, :child)
+        params.require(:notification).permit(:user_id, :child, setup: [:periodo, :acao])
       end
   end
 end

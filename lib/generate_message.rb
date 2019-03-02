@@ -3,9 +3,11 @@ class GenerateMessage
     def self.replace_aluno(text, aluno)        
 
         name = aluno.name
+        text = text.downcase.capitalize
+        
             if (aluno.sexo == 'feminino')                
                 
-                if (text.include? "o aluno") 
+                if (text.include?("o aluno")) 
                     text.sub!('o aluno', " a #{customCapitalize(name)}")
                 elsif (text.include?("a aluna"))    
                     text.sub!('a aluna', " a #{customCapitalize(name)}" )
@@ -14,13 +16,13 @@ class GenerateMessage
             elsif aluno.sexo == 'masculino'
                 
                 if (text.include?("o aluno")) 
-                    text.sub!('o aluno', " o #{ncustomCapitalize(name)}")
+                    text.sub!('o aluno', " o #{customCapitalize(name)}")
                 elsif (text.include?("a aluna"))    
                     text.sub!('a aluna', " o #{customCapitalize(name)}")
                 end            
 
             end
-        
+        return text
 
     end
 
