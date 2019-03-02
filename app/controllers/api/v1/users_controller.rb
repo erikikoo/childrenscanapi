@@ -2,7 +2,7 @@ module Api::V1
   class UsersController < ApplicationController
     before_action :set_user, only: [:show, :update, :destroy, :update_status]
     
-    skip_before_action :authenticate_request, only: %i[adminLogin appLogin]   
+    skip_before_action :authenticate_request, only: %i[adminLogin appLogin index]   
 
     def appLogin
       
