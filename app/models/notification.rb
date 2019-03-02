@@ -6,8 +6,8 @@ class Notification < ApplicationRecord
   # enum acao: [:entrada, :saida]
 
   def self.countNotification(child)    
-    Notification.where(created_at: Date.current, child_id: child, visited: :no).count    
-    # Notification.where(created_at: Date.current, child_id: 1, visited: :no).count    
+    Notification.where("created_at >= ? AND child_id = ? AND visited = ?", Date.current , child, 0).count    
+    # Notification.where(created_at: Date.current).count    
   end
 
   
