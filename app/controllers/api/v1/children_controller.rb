@@ -4,7 +4,7 @@ module Api::V1
     before_action :set_child, only: [:show, :update, :destroy, :update_status]
     # before_action :getAllChildren, only: [:index, :create, :destroy, :generate_qr_code]
     before_action :getAllChildren, only: [:index, :destroy, :generate_qr_code]
-    skip_before_action :authenticate_request, only: [:getChildrenPerUidDevice, :create]
+    skip_before_action :authenticate_request, only: [:getChildrenPerUidDevice, :create, :show, :update]
     
     # GET /children
     def index
@@ -31,7 +31,7 @@ module Api::V1
     def create
       
         @child = Child.new(child_params)           
-        @child.name = @child.name.downcase!
+        @child.name = @child.name.downcase
         params_uid = child_params[:devices_attributes][0][:uid]
         #verifica se existe a criança
         # checkChild = Child.find_by(name: @child.name, nascimento: @child.nascimento)
@@ -62,11 +62,10 @@ module Api::V1
           #se existir o dispositivo
           device = CheckDevice.existDevicePerUid?(params_uid)        
           if device            
-              # user = 1
-              
-              child = Child.create!(name: @child.name, contato: @child.contato ,nascimento: @child.nascimento, responsavel: @child.responsavel, sexo: @child.sexo, user_id: user)
-              if child
-                DeviceChild.create!(device_id: device.id, child_id: child.id)
+             
+              child = Child.create!(name: @child.name, contato: @child.contato ,nascimento: @child.nascimento, responsavel: @child.responsavel, sexo: @child.sexo, user_id: @child.user_id)
+              if Child.create!(name: @child.name, contato: @child.contato ,nascimento: @child.nascimento, responsavel: @child.responsavel, sexo: @child.sexo, user_id: @child.user_id)
+                DeviceChild.create(device_id: device.id, child_id: child.id)
                 render json: {device_id: device.uid, status: :created,  message: 'Criança cadastrado com sucesso!'}
               else
                 render json: child.errors, status: :unprocessable_entity, message: 'Ops, erro ao cadastrar esta criança'
@@ -101,7 +100,7 @@ module Api::V1
 
     def generate_qr_code      
       getAllChildrenOfUser(params[:id])
-      render json: @children, :include => {:user => {:only => :name}} 
+      render json: @children, :include => {:user => {:only => [:id, :name]}} 
     end
 
     def update_status
@@ -158,7 +157,7 @@ module Api::V1
       # Only allow a trusted parameter "white list" through.
       def child_params        
         
-        params.require(:child).permit(:name, :contato, :nascimento, :responsavel, :sexo, :status, devices_attributes: [:uid] )
+        params.require(:child).permit(:name, :contato, :nascimento, :responsavel, :sexo, :status, :user_id, devices_attributes: [:uid] )
       end
   end
 end
