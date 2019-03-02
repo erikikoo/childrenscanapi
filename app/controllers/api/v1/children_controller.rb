@@ -62,7 +62,7 @@ module Api::V1
           #se existir o dispositivo
           device = CheckDevice.existDevicePerUid?(params_uid)        
           if device            
-              user = 1
+              # user = 1
               
               child = Child.create!(name: @child.name, contato: @child.contato ,nascimento: @child.nascimento, responsavel: @child.responsavel, sexo: @child.sexo, user_id: user)
               if child
