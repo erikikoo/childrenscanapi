@@ -72,7 +72,7 @@ module Api::V1
                 render json: child.errors, status: :unprocessable_entity, message: 'Ops, erro ao cadastrar esta criança'
               end    
           else
-            @child.user_id = 1
+            # @child.user_id = 1
             if @child.save!              
               # @children = Child.last
               render json: {device_id: params_uid, status: :created,  message: 'Aluno e dispositivo cadastrado com sucesso!'}
