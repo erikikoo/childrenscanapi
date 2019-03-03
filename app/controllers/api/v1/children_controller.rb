@@ -1,7 +1,7 @@
 module Api::V1
   class ChildrenController < ApplicationController
     # before_action :authenticate_request
-    before_action :set_child, only: [:show, :update, :destroy, :update_status]
+    before_action :set_child, only: [:show, :destroy, :update_status]
     # before_action :getAllChildren, only: [:index, :create, :destroy, :generate_qr_code]
     before_action :getAllChildren, only: [:index, :destroy, :generate_qr_code]
     skip_before_action :authenticate_request, only: [:getChildrenPerUidDevice, :create, :show, :update]
@@ -86,8 +86,15 @@ module Api::V1
 
     # PATCH/PUT /children/1
     def update
-      if @child.update(child_params)
-        render json: @child
+      params_uid = child_params[:devices_attributes][0][:uid]
+      params_child = {name: child_params[:name], contato: child_params[:contato], nascimento: child_params[:nascimento], responsavel: child_params[:responsavel], sexo: child_params[:sexo], user_id: child_params[:user_id]}
+      @child = Child.find(params[:id])
+      if @child.update(params_child)
+        
+        find_child_per_device(params_uid)
+        
+        render json: @children, message: 'Aluno atualizado com sucesso!'
+
       else
         render json: @child.errors, status: :unprocessable_entity
       end
@@ -123,12 +130,10 @@ module Api::V1
 
     def find_child_per_device(uid)
       device = Device.find_by(uid: uid)
-      
       if device
         @children = device.children.map do |d|          
-         d.attributes.merge(notificationTotal: Notification.countNotification(d.id))
-        end
-            
+          d.attributes.merge(notificationTotal: Notification.countNotification(d.id))
+        end 
         return @children
       end
     end  
@@ -157,7 +162,7 @@ module Api::V1
       # Only allow a trusted parameter "white list" through.
       def child_params        
         
-        params.require(:child).permit(:name, :contato, :nascimento, :responsavel, :sexo, :status, :user_id, devices_attributes: [:uid] )
+        params.require(:child).permit(:name, :contato, :nascimento, :responsavel, :sexo, :status, :user_id, :id, :created_at, :updated_at, devices_attributes: [:uid] )
       end
   end
 end
