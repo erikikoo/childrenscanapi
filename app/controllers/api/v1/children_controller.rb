@@ -91,9 +91,9 @@ module Api::V1
       @child = Child.find(params[:id])
       if @child.update(params_child)
         
-        find_child_per_device(params_uid)
+        # find_child_per_device(params_uid)
         
-        render json: @children, message: 'Aluno atualizado com sucesso!'
+        render json: params_uid, message: 'Aluno atualizado com sucesso!'
 
       else
         render json: @child.errors, status: :unprocessable_entity
