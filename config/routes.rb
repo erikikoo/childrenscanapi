@@ -28,7 +28,8 @@ Rails.application.routes.draw do
       get 'event_count/:uid', to: 'events#getEventCount'
       get 'events/:id/:uid', to: 'events#show'
       post 'event_read', to: 'events#eventRead'
-      get 'app-events/:monitor_id', to: 'events#app_show_events'
+      get 'app_transporte-events/:monitor_id', to: 'events#app_transporte_show_events'
+      get 'app_responsavel-events', to: 'events#app_responsavel_show_events'
       post 'devices', to: 'devices#create'
       get 'devices/:uid', to: 'devices#show'  
       

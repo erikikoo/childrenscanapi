@@ -1,24 +1,27 @@
 module Api::V1
   class EventsController < ApplicationController
     before_action :set_event, only: [:show, :update, :destroy]
-    skip_before_action :authenticate_request, only: [:app_show_events, :show, :getEventCount, :eventRead, :create, :index]
+    skip_before_action :authenticate_request, only: [:app_show_events, :show, :getEventCount, :eventRead, :create]
     # GET /events
     def index
       # @events = Event.where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_month, Time.current ).order(created_at: :DESC)
-      
-      # ==> app resp
-      # uid_device = params[:uid_device]
-            
-      # device = Device.find_by(uid_device: uid_device)
-      
-      
-      # render json: @events
-      
+          
       @events = Event.where(user_id: @current_user).order(created_at: :DESC)
       render json: @events
     end
 
-    def app_show_events
+    def app_responsavel_show_events
+       # ==> app resp
+      uid_device = params[:uid_device]
+            
+      device = Device.find_by(uid_device: uid_device)
+      
+      @events = Event.where(user_id: device.children[0].user_id).order(created_at: :DESC) if device
+      
+      render json: @events
+    end
+
+    def app_transporte_show_events
       user_id = MonitorUser.find(params[:monitor_id]).user_id
       
       @events = Event.where(user_id: user_id) if user_id
