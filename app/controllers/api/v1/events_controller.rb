@@ -33,7 +33,7 @@ module Api::V1
     def show
       getChildSubscribeInTheEvent(@event.id, @current_user)
       
-      if @event.image.attached? ? _image_url = url_for(@event.image) : _image_url = nil
+      @event.image.attached? ? _image_url = url_for(@event.image) : _image_url = nil
       
       event = {id: @event.id, message_text: @event.message_text, summary: @event.summary, title: @event.title, user_id: @event.user_id, child_subscribe_in_event: @child_count ,image: _image_url }
       
