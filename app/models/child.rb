@@ -6,6 +6,8 @@ class Child < ApplicationRecord
     has_many :device_children
     has_many :devices, through: :device_children
 
+    has_many :event_children
+    has_many :events, through: :event_children
     # has_many :notification_devices    
     accepts_nested_attributes_for :devices, :allow_destroy => true
     

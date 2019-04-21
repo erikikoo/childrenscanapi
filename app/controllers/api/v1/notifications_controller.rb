@@ -31,7 +31,7 @@ module Api::V1
       periodo = params[:setup][:periodo]
       acao = params[:setup][:acao]
 
-      child = CheckChild.hasChild?(params[:setup][:child])
+      child = CheckChild.hasChild?(params[:setup][:child], user_id)
       
       
       if child
@@ -86,10 +86,14 @@ module Api::V1
 
     def send_evento_for_all_devices
       evento_id = params['id']  
-      $evento_message = Event.find(evento_id).message_text;
+      $evento = Event.find(evento_id);
 
-      sending = PushNotification.sendNotificationForAllDevices($evento_message) if $evento_message
-
+      if $evento && $evento.image.attached?         
+        sending = PushNotification.sendNotificationForAllDevices($evento, $evento.id,url_for($evento.image))
+      else 
+        sending = PushNotification.sendNotificationForAllDevices($evento, $evento.id) if $evento
+      end
+     
       if sending        
         render json: {status: 200, message: "Notificação enviada para todos os celulares cadastrados!"}  
       else        

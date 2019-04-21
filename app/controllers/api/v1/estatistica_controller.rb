@@ -5,7 +5,7 @@ module Api::V1
         def index
             if @current_user.level === 3
                 children = Child.where(status: 1).count
-                users = User.count
+                users = User.where.not(level: 3).count
                 notification_send_in_month = Notification.where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_month, Time.current ).count
                 notification_messages_sending = Notification.count
                 last_child = Child.where("created_at >= ?", Time.now.to_date).limit(7)

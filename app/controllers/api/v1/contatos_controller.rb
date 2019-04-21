@@ -1,10 +1,10 @@
 module Api::V1
   class ContatosController < ApplicationController
     before_action :set_contato, only: [:update, :destroy]
-
+    skip_before_action :authenticate_request, only: [:index]
     # GET /contatos
     def index
-      @contatos = Contato.all
+      @contatos = Contato.last
 
       render json: @contatos
     end
@@ -65,7 +65,7 @@ module Api::V1
 
       # Only allow a trusted parameter "white list" through.
       def contato_params
-        params.require(:contato).permit(:telefone, :email, :url)
+        params.require(:contato).permit(:telefone, :celular, :url)
       end
   end
 end

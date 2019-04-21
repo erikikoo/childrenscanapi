@@ -21,13 +21,18 @@ Rails.application.routes.draw do
       get 'tickets/total', to: 'tickets#total'
       
       get 'notification-relatorio', to: 'notifications#index'
-
+      
       get 'send_evento_for_all_devices/:id', to: "notifications#send_evento_for_all_devices"
       get 'monitor_count', to: 'monitor_users#countMonitor';
       get 'last_contato', to: 'contatos#show'
-      post 'event_count', to: 'events#getEventCount'
+      get 'event_count/:uid', to: 'events#getEventCount'
+      get 'events/:id/:uid', to: 'events#show'
       post 'event_read', to: 'events#eventRead'
+      get 'app-events/:monitor_id', to: 'events#app_show_events'
+      post 'devices', to: 'devices#create'
+      get 'devices/:uid', to: 'devices#show'  
       
+      resources :event_children
       resources :prices
       resources :contatos
       resources :events

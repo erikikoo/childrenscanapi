@@ -10,7 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_13_185551) do
+ActiveRecord::Schema.define(version: 2019_04_13_115151) do
+
+  create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
 
   create_table "answers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "ticket_id"
@@ -36,7 +57,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_185551) do
 
   create_table "contatos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "telefone"
-    t.string "email"
+    t.string "celular"
     t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -52,9 +73,19 @@ ActiveRecord::Schema.define(version: 2019_02_13_185551) do
   end
 
   create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "uid"
+    t.string "uid_onesignal"
+    t.string "uid_device"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "event_children", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "child_id"
+    t.bigint "event_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_id"], name: "index_event_children_on_child_id"
+    t.index ["event_id"], name: "index_event_children_on_event_id"
   end
 
   create_table "event_devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -140,10 +171,13 @@ ActiveRecord::Schema.define(version: 2019_02_13_185551) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answers", "tickets"
   add_foreign_key "children", "users"
   add_foreign_key "device_children", "children"
   add_foreign_key "device_children", "devices"
+  add_foreign_key "event_children", "children"
+  add_foreign_key "event_children", "events"
   add_foreign_key "event_devices", "devices"
   add_foreign_key "event_devices", "events"
   add_foreign_key "events", "users"
