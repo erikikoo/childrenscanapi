@@ -5,12 +5,16 @@ module Api::V1
     # GET /events
     def index
       # @events = Event.where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_month, Time.current ).order(created_at: :DESC)
-      uid_device = params[:uid_device]
-            
-      device = Device.find_by(uid_device: uid_device)
-
-      @events = Event.where(user_id: device.children[0].user_id).order(created_at: :DESC)
       
+      # ==> app resp
+      # uid_device = params[:uid_device]
+            
+      # device = Device.find_by(uid_device: uid_device)
+      
+      
+      # render json: @events
+      
+      @events = Event.where(user_id: @current_user).order(created_at: :DESC)
       render json: @events
     end
 
