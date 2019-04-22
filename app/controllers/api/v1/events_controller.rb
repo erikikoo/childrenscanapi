@@ -1,7 +1,7 @@
 module Api::V1
   class EventsController < ApplicationController
     before_action :set_event, only: [:show, :update, :destroy]
-    skip_before_action :authenticate_request, only: [:app_show_events, :show, :getEventCount, :eventRead, :create]
+    skip_before_action :authenticate_request, only: [:app_responsavel_show_events, :app_transporte_show_events ,:show, :getEventCount, :eventRead, :create]
     # GET /events
     def index
       # @events = Event.where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_month, Time.current ).order(created_at: :DESC)
@@ -23,6 +23,7 @@ module Api::V1
 
     def app_transporte_show_events
       user_id = MonitorUser.find(params[:monitor_id]).user_id
+      # user_id = MonitorUser.find(1).user_id
       
       @events = Event.where(user_id: user_id) if user_id
       
