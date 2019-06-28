@@ -39,6 +39,9 @@ module Api::V1
         
         devices.each do |d|
           devices_id << d.uid_device
+          puts "======================================"
+          puts devices_id
+          puts "======================================"
         end
         
         customMessage = Message.find_by(periodo: periodo, acao: acao, user_id: user_id)
