@@ -43,7 +43,7 @@ module Api::V1
         devices = child.devices
         
         devices.each do |d|
-          devices_id << d.uid          
+          devices_id << d.uid_devices          
         end
         
         customMessage = Message.find_by(periodo: periodo, acao: acao, user_id: user_id)
