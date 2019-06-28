@@ -31,7 +31,7 @@ module Api::V1
       periodo = params[:setup][:periodo]
       acao = params[:setup][:acao]
 
-      child = CheckChild.hasChild?(params[:setup][:child], user_id)
+      child = CheckChild.hasChild?(params[:setup][:leitura], user_id)
       
       
       if child

@@ -33,6 +33,7 @@ module Api::V1
       
         @child = Child.new(child_params)           
         @child.name = @child.name.downcase
+         
         params_uid_oneseignal = child_params[:devices_attributes][0][:uid_onesignal]
         params_uid_device = child_params[:devices_attributes][0][:uid_onesignal]
         #verifica se existe a criança
@@ -45,7 +46,7 @@ module Api::V1
           unless CheckDevice.existDevicePerUid?(params_uid_oneseignal)
             # checkDevice = Device.find_by(uid: @child.devices_attributes[:uid])
             #se exitir a criança cadastrada e não existir o device cadastrado cria o device       
-            s
+            
             #cria o device
             device = Device.create!(uid_onesignal: params_uid_oneseignal, uid_device: params_uid_device )
             
@@ -65,7 +66,7 @@ module Api::V1
           device = CheckDevice.existDevicePerUid?(params_uid_oneseignal)
           if device
              
-              child = Child.create!(name: @child.name, contato: @child.contato ,nascimento: @child.nascimento, responsavel: @child.responsavel, sexo: @child.sexo, user_id: @child.user_id)
+              child = Child.create!(name: @child.name, contato: @child.contato ,nascimento: @child.nascimento, responsavel: @child.responsavel, sexo: @child.sexo, user_id: @child.user_id, uid: GenerateUid.generate)
               
               if child
                 
@@ -116,7 +117,7 @@ module Api::V1
 
     def generate_qr_code      
       getAllChildrenOfUser(params[:id])
-      render json: @children, :include => {:user => {:only => [:id, :name]}} 
+      render json: @children, :include => {:user => {:only => [:id, :uid]}} 
     end
 
     def update_status
