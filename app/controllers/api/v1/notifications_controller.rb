@@ -34,8 +34,8 @@ module Api::V1
       child = CheckChild.hasChild?(params[:setup][:child], user_id)
       
       puts "======================"
-      puts child
-      
+      puts child.name
+      puts child.devices.last      
       puts "======================"
       
       if child
