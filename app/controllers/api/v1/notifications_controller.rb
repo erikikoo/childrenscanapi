@@ -38,7 +38,7 @@ module Api::V1
         devices = child.devices
         
         devices.each do |d|
-          devices_id << d.uid_device
+          devices_id << d.uid_onesignal
           puts "======================================"
           puts devices_id
           puts "======================================"
