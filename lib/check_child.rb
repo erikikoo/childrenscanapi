@@ -9,7 +9,7 @@ class CheckChild
 
     def self.hasChild? name_or_uid, user_id        
         child = Child.find_by(uid: name_or_uid, user_id: user_id)
-        child = Child.find_by(name: name, user_id: user_id) unless child
+        child = Child.find_by(name: name_or_uid, user_id: user_id) unless child
         return child if child
         false
     end
