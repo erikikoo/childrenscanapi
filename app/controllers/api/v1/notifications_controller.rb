@@ -33,6 +33,10 @@ module Api::V1
 
       child = CheckChild.hasChild?(params[:setup][:child], user_id)
       
+      puts "======================"
+      puts child
+      
+      puts "======================"
       
       if child
         devices_id = []  
