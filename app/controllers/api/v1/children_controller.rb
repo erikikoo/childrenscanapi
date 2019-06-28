@@ -81,6 +81,7 @@ module Api::V1
               end    
           else
             # @child.user_id = 1
+            @child.uid = GenerateUid.generate
             if @child.save!              
               # @children = Child.last
               render json: {device_id: params_uid_oneseignal, status: :created,  message: 'Aluno e dispositivo cadastrado com sucesso!'}
