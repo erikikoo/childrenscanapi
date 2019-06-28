@@ -33,17 +33,12 @@ module Api::V1
 
       child = CheckChild.hasChild?(params[:setup][:child], user_id)
       
-      puts "======================"
-      puts child.name
-      puts child.devices.last      
-      puts "======================"
-      
       if child
         devices_id = []  
         devices = child.devices
         
         devices.each do |d|
-          devices_id << d.uid_devices          
+          devices_id << d.uid_device
         end
         
         customMessage = Message.find_by(periodo: periodo, acao: acao, user_id: user_id)
