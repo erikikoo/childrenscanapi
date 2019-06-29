@@ -3,7 +3,7 @@ module Api::V1
     before_action :set_escola, only: [:show, :update, :destroy]
     before_action :getAllEscolasPerUser, only: [:destroy, :create]
     before_action :getAllEscolasPerUser, only: [:index]
-    skip_before_action :authenticate_request, only: [:app_index]
+    skip_before_action :authenticate_request, only: [:index]
     # GET /escolas
     def index
       if @current_user.level === 3
