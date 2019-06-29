@@ -12,7 +12,7 @@ class MensalidadesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create mensalidade" do
     assert_difference('Mensalidade.count') do
-      post mensalidades_url, params: { mensalidade: { child: @mensalidade.child, status: @mensalidade.status, user_id: @mensalidade.user_id } }, as: :json
+      post mensalidades_url, params: { mensalidade: { child_id: @mensalidade.child_id, status: @mensalidade.status, user_id: @mensalidade.user_id } }, as: :json
     end
 
     assert_response 201
@@ -24,7 +24,7 @@ class MensalidadesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update mensalidade" do
-    patch mensalidade_url(@mensalidade), params: { mensalidade: { child: @mensalidade.child, status: @mensalidade.status, user_id: @mensalidade.user_id } }, as: :json
+    patch mensalidade_url(@mensalidade), params: { mensalidade: { child_id: @mensalidade.child_id, status: @mensalidade.status, user_id: @mensalidade.user_id } }, as: :json
     assert_response 200
   end
 

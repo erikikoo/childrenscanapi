@@ -46,6 +46,6 @@ class MensalidadesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def mensalidade_params
-      params.require(:mensalidade).permit(:user_id, :child, :status)
+      params.require(:mensalidade).permit(:user_id, :child_id, :status)
     end
 end

@@ -2,10 +2,10 @@
 
 one:
   user: one
-  child: 
+  child: one
   status: false
 
 two:
   user: two
-  child: 
+  child: two
   status: false
