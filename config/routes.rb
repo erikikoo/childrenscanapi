@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   
   
   
-  resources :mensalidades
+  
   namespace :api do
     namespace :v1 do      
       
@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       post 'devices', to: 'devices#create'
       get 'devices/:uid', to: 'devices#show'  
       
+      resources :mensalidades
       resources :escolas
       resources :event_children
       resources :prices
