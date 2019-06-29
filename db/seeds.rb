@@ -11,7 +11,7 @@ puts "Criando Usuario"
     
 User.create!(name: "Erik R de Souza", password: 'HayHelena', login: 'erikikoo@hotmail.com', contato: Faker::Base.numerify('(##) #####-####'), level: 3)
 
-a = User.create!(name: "Transporte", password: 'transporte', login: 'teste@teste.com', contato: Faker::Base.numerify('(##) #####-####'), level: 2)
+a = User.create!(name: "Transporte", password: 'transporte', login: 'transporte', contato: Faker::Base.numerify('(##) #####-####'), level: 2)
 puts "Criando Usuario"
 b = MonitorUser.create!(name: 'Monitor de Teste', password: 'monitor', login: 'monitor', user_id: a.id)
 puts "Criando Monitor"     
