@@ -9,11 +9,17 @@ require 'faker'
 Faker::Config.locale = 'pt-BR'
 puts "Criando Usuario"
     
-a = User.create!(name: "Erik R de Souza", password: 'HayHelena', login: 'erikikoo@hotmail.com', contato: Faker::Base.numerify('(##) #####-####'), level: 3)
+User.create!(name: "Erik R de Souza", password: 'HayHelena', login: 'erikikoo@hotmail.com', contato: Faker::Base.numerify('(##) #####-####'), level: 3)
 
+a = User.create!(name: "Transporte", password: 'transporte', login: 'teste@teste.com', contato: Faker::Base.numerify('(##) #####-####'), level: 2)
+puts "Criando Usuario"
+b = MonitorUser.create!(name: 'Monitor de Teste', password: 'monitor', login: 'monitor', user_id: a.id)
 puts "Criando Monitor"     
-b = MonitorUser.create!(name: 'Paula Cristina Silva', password: '123456', login: 'paulinha', user_id: a.id)
-        
+
+puts "add escola"
+5.times do 
+    Escola.create!(nome: Faker::Name.name, user_id: a.id)
+end
 #         puts 'Criando Crianças'
 #         rand(1..20).times do
             

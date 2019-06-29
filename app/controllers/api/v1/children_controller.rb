@@ -173,7 +173,7 @@ module Api::V1
       # Only allow a trusted parameter "white list" through.
       def child_params       
         
-        params.require(:child).permit(:name, :contato, :nascimento, :responsavel, :sexo, :status, :user_id, :id, :created_at, :updated_at, devices_attributes: [:uid_onesignal, :uid_device] )
+        params.require(:child).permit(:name, :contato, :nascimento, :responsavel, :sexo, :status, :venc,:user_id, :id, :escola_id,:created_at, :updated_at, devices_attributes: [:uid_onesignal, :uid_device] )
       end
   end
 end
