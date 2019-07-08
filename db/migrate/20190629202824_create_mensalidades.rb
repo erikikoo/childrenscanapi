@@ -3,7 +3,8 @@ class CreateMensalidades < ActiveRecord::Migration[5.2]
     create_table :mensalidades do |t|
       t.references :user, foreign_key: true
       t.references :child, foreign_key: true
-      t.boolean :status
+      t.integer :mes, limit: 2
+      # t.boolean :status, default: true
 
       t.timestamps
     end

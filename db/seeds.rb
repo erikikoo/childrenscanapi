@@ -21,10 +21,10 @@ puts "add escola"
     Escola.create!(nome: Faker::Name.name, user_id: a.id)
 end
 #         puts 'Criando Crianças'
-#         rand(1..20).times do
+        rand(1..20).times do
             
-#             c = Child.create!(name: Faker::Name.name, nascimento: Faker::Date.between(2.days.ago, Date.today), responsavel: Faker::Name.name, parentesco: rand(0..2), sexo: rand(0..1), contato: Faker::Base.numerify('(##) #####-####'), user_id: a.id)
-
+            c = Child.create!(name: Faker::Name.name, nascimento: Faker::Date.between(2.days.ago, Date.today), responsavel: Faker::Name.name, sexo: rand(0..1), contato: Faker::Base.numerify('(##) #####-####'), user_id: a.id, uid: GenerateUid.generate, escola_id: rand(1..5), venc: rand(1..31))
+        end
 #             puts "Criando SMS"
 #             rand(1..15).times do
 #                 SmsMessage.create!(child_id: c.id, monitor_user_id: b.id, periodo: rand(0..3), acao: rand(0..1))

@@ -38,10 +38,7 @@ module Api::V1
         devices = child.devices
         
         devices.each do |d|
-          devices_id << d.uid_onesignal
-          puts "======================================"
-          puts devices_id
-          puts "======================================"
+          devices_id << d.uid_onesignal         
         end
         
         customMessage = Message.find_by(periodo: periodo, acao: acao, user_id: user_id)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_29_160830) do
+ActiveRecord::Schema.define(version: 2019_06_29_202824) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -119,6 +119,16 @@ ActiveRecord::Schema.define(version: 2019_06_29_160830) do
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
+  create_table "mensalidades", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "child_id"
+    t.integer "mes", limit: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_id"], name: "index_mensalidades_on_child_id"
+    t.index ["user_id"], name: "index_mensalidades_on_user_id"
+  end
+
   create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
     t.integer "acao", limit: 1
@@ -195,6 +205,8 @@ ActiveRecord::Schema.define(version: 2019_06_29_160830) do
   add_foreign_key "event_devices", "devices"
   add_foreign_key "event_devices", "events"
   add_foreign_key "events", "users"
+  add_foreign_key "mensalidades", "children"
+  add_foreign_key "mensalidades", "users"
   add_foreign_key "messages", "users"
   add_foreign_key "monitor_users", "users"
   add_foreign_key "notifications", "children"

@@ -1,8 +1,8 @@
 module Api::V1
   class ChildrenController < ApplicationController
-    # before_action :authenticate_request
-    before_action :set_child, only: [:show, :destroy, :update_status]
-    # before_action :getAllChildren, only: [:index, :create, :destroy, :generate_qr_code]
+    
+    before_action :set_child, only: [:destroy, :update_status, :show]
+    # before_action :get_child, only: [:show]    
     before_action :getAllChildren, only: [:index, :destroy, :generate_qr_code]
     skip_before_action :authenticate_request, only: [:getChildrenPerUidDevice, :create, :show, :update]
     
@@ -10,8 +10,8 @@ module Api::V1
     def index
       # if params[:uid] != 'undefined'         
       #   find_child_per_device(params[:uid]) 
-        
-        render json: @children, :include => {:user => {:only => :name}}      
+        # @children = hasMensalidades?(@children)
+        render json: @children#, :include => {:user => {:only => :name}, :mensalidades => {:only => :mes}}      
       # end
     end
 
@@ -25,7 +25,10 @@ module Api::V1
 
     # GET /children/1
     def show
-      render json: @child, :include => {:user => {:only => :name}}
+      # @child = hasMensalidades?(@child)
+    
+      # render json: @child[0], :include => {:user => {:only => :name}, :escola => {:only => :nome}}
+      render json: @child, :include => {:user => {:only => :name}, :escola => {:only => :nome}, :mensalidades => {:only => :mes}}
     end
 
     # POST /children
@@ -139,6 +142,7 @@ module Api::V1
     private
 
 
+
     def find_child_per_device(uid)
       device = Device.find_by(uid_onesignal: uid)
       if device
@@ -149,13 +153,24 @@ module Api::V1
       end
     end  
       
-    def getAllChildren
-      #monitor = User.find(@current_user)
+    def getAllChildren     
+      
       if (@current_user.level == 3) 
         @children = Child.all.order(user_id: :asc)
-       else 
-        @children = Child.where(user_id: @current_user)
-       end
+      else 
+        @children = Child.includes(:user, :escola).where(user_id: @current_user)
+      end        
+      @children = @children.map do |child|        
+          
+        {
+          id: child.id, 
+          name: child.name,            
+          responsavel: child.responsavel,            
+          user: {name: child.user.name},
+          user_id: child.user_id,            
+          last_mensalidade: child.mensalidades.maximum('mes')
+        }
+      end
     end
     
     def getAllChildrenOfUser(id='')
@@ -168,6 +183,10 @@ module Api::V1
     # Use callbacks to share common setup or constraints between actions.
       def set_child
         @child = Child.find(params[:id])
+      end
+     
+      def get_child
+        @child = Child.where(id: params[:id])
       end
 
       # Only allow a trusted parameter "white list" through.

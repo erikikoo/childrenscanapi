@@ -1,6 +1,8 @@
 class Child < ApplicationRecord
     belongs_to :user
     
+    belongs_to :escola# through: :user
+    
     has_many :notifications, dependent: :destroy
     
     has_many :device_children
@@ -9,7 +11,8 @@ class Child < ApplicationRecord
     has_many :event_children
     has_many :events, through: :event_children
 
-    has_one :escola
+    has_many :mensalidades
+
     # has_many :notification_devices    
     accepts_nested_attributes_for :devices, :allow_destroy => true
     
