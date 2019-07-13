@@ -1,12 +1,14 @@
 class PushNotification
     require 'net/http'
 
-    $APP_ID = "ad9d1d11-ff97-4e5d-b024-d81fd0e8468e"
+    $APP_ID = ENV["ONESIGNAL_APP_ID"]
+    $API_KEY = ENV["ONESIGNAL_API_KEY"]
+
     $URL = URI.parse('https://onesignal.com/api/v1/notifications')
-    # $HEADERS = { "Authorization" => "Basic ODExNDcwNjItMGZmMC00ZTYwLTg2MjAtNTU2ZjNmZWVjZDc0", "Content-Type" => "application/json" }
+    
     
     def self.send device_ids, message       
-        headers = { "Authorization" => "Basic ODExNDcwNjItMGZmMC00ZTYwLTg2MjAtNTU2ZjNmZWVjZDc0", "Content-Type" => "application/json" }       
+        headers = { "Authorization" => "Basic #{$API_KEY}", "Content-Type" => "application/json" }       
         
         params = {"app_id" => $APP_ID, 
           "contents" => {"en" => message},
@@ -27,7 +29,7 @@ class PushNotification
     end
 
     def self.getNotifications notification_id
-        headers = { "Authorization" => "Basic ODExNDcwNjItMGZmMC00ZTYwLTg2MjAtNTU2ZjNmZWVjZDc0", 
+        headers = { "Authorization" => "Basic #{$API_KEY}", 
                     "Content-Type" => "application/json"                    
                   }       
 
@@ -36,8 +38,8 @@ class PushNotification
             "app_id" => $APP_ID
         }
 
-        uri = URI.parse('https://onesignal.com/api/v1/notifications/'+notification_id+'?app_id=ad9d1d11-ff97-4e5d-b024-d81fd0e8468e')
-        # uri = URI.parse('https://onesignal.com/api/v1/notifications/notification_id?app_id="ad9d1d11-ff97-4e5d-b024-d81fd0e8468e""')
+        uri = URI.parse("https://onesignal.com/api/v1/notifications/+#{notification_id}?app_id=#{$API_KEY}")
+        
 
         http = Net::HTTP.new(uri.host, uri.port)
         # http = Net::HTTP.new($URL.host, $URL.port)
@@ -64,7 +66,7 @@ class PushNotification
             "data" => {"event_id": id}            
         }
       
-      headers = { "Authorization" => "Basic ODExNDcwNjItMGZmMC00ZTYwLTg2MjAtNTU2ZjNmZWVjZDc0", "Content-Type" => "application/json" }       
+      headers = { "Authorization" => "Basic #{$API_KEY}", "Content-Type" => "application/json" }       
       
       http = Net::HTTP.new($URL.host, $URL.port)
       http.use_ssl = true
