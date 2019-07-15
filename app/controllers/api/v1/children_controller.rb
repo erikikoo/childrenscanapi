@@ -67,13 +67,13 @@ module Api::V1
 
           #se existir o dispositivo
           device = CheckDevice.existDevicePerUid?(params_uid_oneseignal)
+          
           if device
-             
-              child = Child.create!(name: @child.name, contato: @child.contato ,nascimento: @child.nascimento, responsavel: @child.responsavel, sexo: @child.sexo, user_id: @child.user_id, uid: GenerateUid.generate)
-              
+            child = Child.create!(name: @child.name, contato: @child.contato ,nascimento: @child.nascimento, responsavel: @child.responsavel, sexo: @child.sexo, user_id: @child.user_id, uid: GenerateUid.generate, venc: @child.venc, escola_id: @child.escola_id)
+                          
               if child
                 
-                DeviceChild.create(device_id: device.id, child_id: child.id)
+                DeviceChild.create!(device_id: device.id, child_id: child.id)
                 
                 render json: {device_id: device.uid_onesignal, status: :created,  message: 'Criança cadastrado com sucesso!'}
 
