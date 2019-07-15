@@ -38,6 +38,9 @@ Rails.application.routes.draw do
       delete 'mensalidades/:child_id/:mes', to: "mensalidades#destroy"
       get 'mensalidades/:child_id', to: "mensalidades#app_get_mensalidades"
       post 'mensalidades/:target', to: "mensalidades#create"
+      
+      get 'escolas/:user_id', to: "escolas#app_get_escolas"
+
       resources :mensalidades
       resources :escolas
       resources :event_children
