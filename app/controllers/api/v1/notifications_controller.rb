@@ -12,15 +12,19 @@ module Api::V1
     def show
       @notifications = []
       
-      child = Child.find(params[:id])
-      notification_ids = child.notifications.where("created_at >= ?", Date.current).order(created_at: :DESC)
+      child = Child.find(params[:child_id])
       
-      child.notifications.update(visited: :yes)
-      
-      notification_ids.each do |n|
-        @notifications  << {child_name: child.name, created_at: n.created_at, mensagem: PushNotification.getNotifications(n.notification_id)['contents']['en']}
+      if (child)
+        notification_ids = child.notifications.where("created_at >= ?", Date.current).order(created_at: :DESC)
+        
+        child.notifications.update(visited: :yes)
+        
+        notification_ids.each do |n|
+          @notifications  << {child_name: child.name, created_at: n.created_at, mensagem: PushNotification.getNotifications(n.notification_id)['contents']['en']}
+        end
       end
-      render json: @notifications
+        render json: @notifications
+      
     end
 
     # POST /notifications
