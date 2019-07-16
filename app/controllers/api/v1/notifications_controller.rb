@@ -12,7 +12,7 @@ module Api::V1
     def show
       @notifications = []
       
-      child = Child.find_by(id: params[:child_id])
+      child = Child.find_by(id: params[:id])
       
       puts "=============================="
       puts child
