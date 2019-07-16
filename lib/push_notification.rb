@@ -38,7 +38,7 @@ class PushNotification
             "app_id" => $APP_ID
         }
 
-        uri = URI.parse("https://onesignal.com/api/v1/notifications/+#{notification_id}?app_id=#{$API_KEY}")
+        uri = URI.parse("https://onesignal.com/api/v1/notifications/#{notification_id}?app_id=#{$API_KEY}")
         
 
         http = Net::HTTP.new(uri.host, uri.port)
