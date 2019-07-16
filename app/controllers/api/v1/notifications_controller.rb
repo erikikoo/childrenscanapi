@@ -14,12 +14,9 @@ module Api::V1
       
       child = Child.find_by(id: params[:id])
       
-      puts "=============================="
-      puts child
-      puts "=============================="
       
       if (child)
-        notification_ids = child.notifications#.where("created_at >= ?", Date.current).order(created_at: :DESC)
+        notification_ids = child.notifications.where("created_at >= ?", Date.current).order(created_at: :DESC)
         
         child.notifications.update(visited: :yes)
         
