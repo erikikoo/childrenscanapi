@@ -35,7 +35,7 @@ module Api::V1
     def create
       
         @child = Child.new(child_params)           
-        @child.name = @child.name.downcase
+        @child.name = @child.name.downcase.squish
          
         params_uid_oneseignal = child_params[:devices_attributes][0][:uid_onesignal]
         params_uid_device = child_params[:devices_attributes][0][:uid_onesignal]
