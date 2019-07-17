@@ -62,13 +62,9 @@ module Api::V1
         unless params[:event][:image].blank?
           $_cloudinary_image = Cloudinary::Uploader.upload(params[:event][:image])
           if $_cloudinary_image
-            $_event_created = Event.find(@event.id)
-            puts "==========================="
-            puts $_cloudinary_image['secure_url']
-            puts $_cloudinary_image['secure_url'].class
-            puts "===========================" 
+            $_event_created = Event.find(@event.id)         
             
-            $_event_created.update(cloudinary_url: $_cloudinary_image['secure_url'].to_s)
+            $_event_created.update(cloudinary_url: $_cloudinary_image['secure_url'].to_s, cloudinary_public_id: $_cloudinary_image['public_id'])
           else
             $_event_created.destroy
           end

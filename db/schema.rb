@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(version: 2019_07_17_171907) do
     t.datetime "updated_at", null: false
     t.string "summary"
     t.string "cloudinary_url"
+    t.string "cloudinary_public_id"
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
