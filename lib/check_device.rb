@@ -6,4 +6,13 @@ class CheckDevice
         return false 
         
     end
+
+    def self.getAllDevices children
+        devices_id = []  
+        devices = child.devices
+        
+        devices.each do |d|
+          devices_id << d.uid_onesignal         
+        end
+    end
 end
