@@ -34,7 +34,7 @@ module Api::V1
     def show
       getChildSubscribeInTheEvent(@event.id, @current_user)
       
-      @event.cloudinary_url.exist? ? _image_url = url_for(@event.cloudinary_url) : _image_url = nil
+      @event.cloudinary_url.nil? ? _image_url = nil  : _image_url = url_for(@event.cloudinary_url)
       
       event = {id: @event.id, message_text: @event.message_text, summary: @event.summary, title: @event.title, user_id: @event.user_id, child_subscribe_in_event: @child_count ,image: _image_url }
       
