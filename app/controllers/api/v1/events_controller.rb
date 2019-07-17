@@ -52,14 +52,24 @@ module Api::V1
         @event = Event.new(params.require(:event).permit(:title, :message_text, :user_id, :summary))
       end
       
+      
+
+      puts "==========================="
+      puts @event.id
+      puts "==========================="
       if @event.save!
         
         unless params[:event][:image].blank?
           $_cloudinary_image = Cloudinary::Uploader.upload(params[:event][:image])
-          if $_cloudinary_image 
-            @event.update(cloudinary_url: $_cloudinary_image['secure_url'])  
+          if $_cloudinary_image
+            $_event_created = Event.find(@event.id)
+            puts "==========================="
+            puts $_cloudinary_image['secure_url']
+            puts "===========================" 
+            
+            $_event_created.update(cloudinary_url: $_cloudinary_image['secure_url'])  
           else
-            @event.destroy
+            $_event_created.destroy
           end
         end  
         # @event.image.attach(params[:event][:image]) unless params[:event][:image].blank?
