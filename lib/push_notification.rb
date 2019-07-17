@@ -50,22 +50,20 @@ class PushNotification
         # return request
     end
 
-    def self.sendNotificationForAllDevices evento, id, image_url = nil
-        $_image_url = image_url if image_url
-        
-        
+    def self.sendNotificationForAllDevices evento, device_ids, image_url = nil
+        $_image_url = image_url if image_url       
           
         params = {"app_id" => $APP_ID, 
             "contents" => {"en" => evento.title},
-            # "include_player_ids" => device_ids,
-            "included_segments" => ["Active Users", "Inactive Users"],
+            "include_player_ids" => device_ids,
+            # "included_segments" => ["Active Users", "Inactive Users"],
             "big_picture" => $_image_url,
             "priority" => 10,
             "buttons" => [
                 {"id": 'subscribe', 'text': 'Participar', "icon": "#{ActionController::Base.helpers.image_url("like.png")}"}, 
                 {"id": 'unsubscribe', 'text': 'Não Participar', 'icon': "#{ActionController::Base.helpers.image_url("icons/unlike.png")}"}
             ],
-            "data" => {"event_id": id}            
+            "data" => {"event_id": evento.id}            
         }
       
       headers = { "Authorization" => "Basic #{$API_KEY}", "Content-Type" => "application/json" }       

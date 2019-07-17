@@ -93,20 +93,25 @@ module Api::V1
       evento_id = params['id']  
       $evento = Event.find(evento_id);
       
-      # User.find(@current.id)
+      user = User.find($evento.user_id)
+      
+      device_ids = CheckDevice.getAllDevices user.children
+      
       puts "=================================="
-      puts @current_user
-      puts @current_user.id
+      device_ids.each do |d|
+        puts d
+      end      
       puts "=================================="
-      # if $evento
-      #   sending = PushNotification.sendNotificationForAllDevices($evento, $evento.id, url_for($evento.cloudinary_url))
-      # end
+      
+      if $evento
+        sending = PushNotification.sendNotificationForAllDevices($evento, device_ids, url_for($evento.cloudinary_url))
+      end
      
-      # if sending        
-      #   render json: {status: 200, message: "Notificação enviada para todos os celulares cadastrados!"}  
-      # else        
-      #   render json: {status: 404, message: "Ops!!, não foi possível enviar a notificação"}
-      # end
+      if sending        
+        render json: {status: 200, message: "Notificação enviada para todos os celulares cadastrados!"}  
+      else        
+        render json: {status: 404, message: "Ops!!, não foi possível enviar a notificação"}
+      end
     end
 
 

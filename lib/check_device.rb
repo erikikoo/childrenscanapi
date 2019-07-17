@@ -9,10 +9,13 @@ class CheckDevice
 
     def self.getAllDevices children
         devices_id = []  
-        devices = child.devices
         
-        devices.each do |d|
-          devices_id << d.uid_onesignal         
+        children.each do |child|        
+            child.devices.each do |d|
+                devices_id << d.uid_onesignal         
+            end
         end
+            
+        return devices_id
     end
 end
