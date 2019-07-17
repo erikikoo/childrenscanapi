@@ -47,14 +47,23 @@ module Api::V1
     # POST /events
     def create
       if (params[:event][:image] != '')
-        @event = Event.new(event_params)      
+        @event = Event.new(event_params)
       else 
         @event = Event.new(params.require(:event).permit(:title, :message_text, :user_id, :summary))
       end
       # debugger
-       if @event.save!
-       
-        @event.image.attach(params[:event][:image]) unless params[:event][:image].blank?
+      $_event_created = @event.save!
+       if $_event_created
+        
+        unless params[:event][:image].blank?
+          $_cloudinary_image = Cloudinary::Uploader.upload(params[:event][:image])
+          if $_cloudinary_image 
+            $_event_created.update(cloudinary_url: $_cloudinary_image['secure_url'])  
+          else
+            $_event_created.destroy
+          end
+        end  
+        # @event.image.attach(params[:event][:image]) unless params[:event][:image].blank?
        
           
         render json: @events, status: :created
@@ -75,10 +84,10 @@ module Api::V1
 
     # DELETE /events/1
     def destroy
-      @image = ActiveStorage::Attachment.find(@event.id)
-      if @image.image.attached?
-        @image.purge
-      end
+      # @image = ActiveStorage::Attachment.find(@event.id)
+      # if @image.image.attached?
+      #   @image.purge
+      # end
       @event.destroy
       
     end
@@ -140,7 +149,7 @@ module Api::V1
 
       # Only allow a trusted parameter "white list" through.
       def event_params
-        params.require(:event).permit(:title, :message_text, :user_id, :summary, :image)
+        params.require(:event).permit(:title, :message_text, :user_id, :summary, :cloudinary_url)
       end
   end
 end

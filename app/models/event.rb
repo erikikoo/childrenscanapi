@@ -7,7 +7,7 @@ class Event < ApplicationRecord
   has_many :event_children
   has_many :children, through: :event_children
 
-  has_one_attached :image
+  # has_one_attached :image
 
   
  end
