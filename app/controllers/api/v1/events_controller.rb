@@ -65,9 +65,10 @@ module Api::V1
             $_event_created = Event.find(@event.id)
             puts "==========================="
             puts $_cloudinary_image['secure_url']
+            puts $_cloudinary_image['secure_url'].class
             puts "===========================" 
             
-            $_event_created.update(cloudinary_url: $_cloudinary_image['secure_url'])  
+            $_event_created.update(cloudinary_url: $_cloudinary_image['secure_url'].to_s)
           else
             $_event_created.destroy
           end
