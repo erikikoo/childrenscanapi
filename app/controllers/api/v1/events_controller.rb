@@ -3,9 +3,7 @@ module Api::V1
     before_action :set_event, only: [:show, :update, :destroy]
     skip_before_action :authenticate_request, only: [:app_responsavel_show_events, :app_transporte_show_events ,:show, :getEventCount, :eventRead, :create]
     # GET /events
-    def index
-      # @events = Event.where("created_at >= ? AND created_at <= ?", Time.current.beginning_of_month, Time.current ).order(created_at: :DESC)
-          
+    def index          
       @events = Event.where(user_id: @current_user).order(created_at: :DESC)
       render json: @events
     end
@@ -22,11 +20,16 @@ module Api::V1
     end
 
     def app_transporte_show_events
-      user_id = MonitorUser.find(params[:monitor_id]).user_id
-      # user_id = MonitorUser.find(1).user_id
+      @events = []
       
-      @events = Event.where(user_id: user_id) if user_id
+      user_id = MonitorUser.find(params[:monitor_id]).user_id      
       
+      $_events = Event.where(user_id: user_id) if user_id
+      
+      $_events.each do |event|
+        _image_url = getCloudinaryUrl(event)
+        @events << {id: event.id, message_text: event.message_text, summary: event.summary, title: event.title, user_id: event.user_id, image: _image_url }
+      end
       render json: @events
     end
 
@@ -34,7 +37,8 @@ module Api::V1
     def show
       getChildSubscribeInTheEvent(@event.id, @current_user)
       
-      @event.cloudinary_url.nil? ? _image_url = nil  : _image_url = url_for(@event.cloudinary_url)
+      _image_url = getCloudinaryUrl(@event)
+      
       
       event = {id: @event.id, message_text: @event.message_text, summary: @event.summary, title: @event.title, user_id: @event.user_id, child_subscribe_in_event: @child_count ,image: _image_url }
       
@@ -51,12 +55,7 @@ module Api::V1
       else 
         @event = Event.new(params.require(:event).permit(:title, :message_text, :user_id, :summary))
       end
-      
-      
-
-      puts "==========================="
-      puts @event.id
-      puts "==========================="
+  
       if @event.save!
         
         unless params[:event][:image].blank?
@@ -91,10 +90,7 @@ module Api::V1
     # DELETE /events/1
     def destroy      
       img = Cloudinary::Uploader.destroy(@event.cloudinary_public_id)
-      puts "========================================"
-      puts img
-      puts "========================================"
-      
+           
       @event.destroy
       
       
@@ -113,6 +109,12 @@ module Api::V1
 
     
     private
+
+    def getCloudinaryUrl event
+      event.cloudinary_url.nil? ? _image_url = nil  : _image_url = url_for(event.cloudinary_url)
+      return _image_url
+    end
+
     def eventRead(uid, id)
       
       device_id = Device.find_by(uid_onesignal: uid)

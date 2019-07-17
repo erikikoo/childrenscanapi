@@ -93,10 +93,8 @@ module Api::V1
       evento_id = params['id']  
       $evento = Event.find(evento_id);
 
-      if $evento && $evento.image.attached?         
-        sending = PushNotification.sendNotificationForAllDevices($evento, $evento.id,url_for($evento.image))
-      else 
-        sending = PushNotification.sendNotificationForAllDevices($evento, $evento.id) if $evento
+      if $evento
+        sending = PushNotification.sendNotificationForAllDevices($evento, $evento.id,url_for($evento.cloudinary_url))
       end
      
       if sending        
