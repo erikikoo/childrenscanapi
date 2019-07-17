@@ -10,11 +10,13 @@ module Api::V1
 
     def app_responsavel_show_events
        # ==> app resp
+      @events = []
+      
       uid_device = params[:uid_device]
             
       device = Device.find_by(uid_device: uid_device)
       
-      @events = Event.where(user_id: device.children[0].user_id).order(created_at: :DESC) if device && device.children
+      @events = Event.where(user_id: device.children[0].user_id).order(created_at: :DESC) if device && !device.children[0].nil?
       
       render json: @events
     end
