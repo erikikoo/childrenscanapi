@@ -14,7 +14,7 @@ module Api::V1
             
       device = Device.find_by(uid_device: uid_device)
       
-      @events = Event.where(user_id: device.children[0].user_id).order(created_at: :DESC) if device
+      @events = Event.where(user_id: device.children[0].user_id).order(created_at: :DESC) if device && device.children
       
       render json: @events
     end
@@ -25,12 +25,10 @@ module Api::V1
       user_id = MonitorUser.find(params[:monitor_id]).user_id      
       
       $_events = Event.where(user_id: user_id) if user_id
-      puts "==============================="
-      puts $_events
-      puts "==============================="
+   
       $_events.each do |event|
         _image_url = getCloudinaryUrl(event)
-        @events << {id: event.id, message_text: event.message_text, summary: event.summary, title: event.title, image: _image_url }
+        @events << {id: event.id, message_text: event.message_text, summary: event.summary, title: event.title, user_id: event.user_id, image: _image_url }
       end
       render json: @events
     end
