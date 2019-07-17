@@ -95,8 +95,8 @@ module Api::V1
       
       # User.find(@current.id)
       puts "=================================="
-      puts @current
-      puts @current.id
+      puts @current_user
+      puts @current_user.id
       puts "=================================="
       # if $evento
       #   sending = PushNotification.sendNotificationForAllDevices($evento, $evento.id, url_for($evento.cloudinary_url))
