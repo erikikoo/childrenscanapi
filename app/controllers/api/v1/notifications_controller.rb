@@ -37,14 +37,14 @@ module Api::V1
       periodo = params[:setup][:periodo]
       acao = params[:setup][:acao]
 
-      child = CheckChild.hasChild?(params[:setup][:child], user_id)
+      child = CheckChild.hasChild?(params[:setup][:leitura], user_id)
       
       if child
         devices_id = []  
         devices = child.devices
         
         devices.each do |d|
-          devices_id << d.uid_onesignal         
+          devices_id << d.uid_onesignal
         end
         
         customMessage = Message.find_by(periodo: periodo, acao: acao, user_id: user_id)
@@ -95,13 +95,7 @@ module Api::V1
       
       user = User.find($evento.user_id)
       
-      device_ids = CheckDevice.getAllDevices user.children
-      
-      puts "=================================="
-      device_ids.each do |d|
-        puts d
-      end      
-      puts "=================================="
+      device_ids = CheckDevice.getAllDevices user.children      
       
       if $evento
         sending = PushNotification.sendNotificationForAllDevices($evento, device_ids, url_for($evento.cloudinary_url))
