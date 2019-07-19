@@ -44,9 +44,9 @@ module Api::V1
         checkChild = CheckChild.existChildPerNameAndNasc?(@child.name, @child.nascimento) 
         #se existir criança
         if checkChild
-          
           #checa se existe o device
-          unless CheckDevice.existDevicePerUid?(params_uid_oneseignal)
+          device = CheckDevice.existDevicePerUid?(params_uid_oneseignal)
+          unless device
             # checkDevice = Device.find_by(uid: @child.devices_attributes[:uid])
             #se exitir a criança cadastrada e não existir o device cadastrado cria o device       
             
@@ -60,7 +60,8 @@ module Api::V1
 
             render json: {device_id: device.uid_onesignal, status: :created,  message: 'Dispositivo cadastrado com sucesso!'}
           else
-            render json: {status: :unprocessable_entity, message: 'Dispositivo já cadastrado!'}
+            DeviceChild.create!(device_id: device.id, child_id: checkChild.id)
+            render json: {status: :unprocessable_entity, message: 'Dispositivo e/ou Criança cadastrados!'}
           end
 
         else
@@ -145,6 +146,8 @@ module Api::V1
 
     def find_child_per_device(uid)
       device = Device.find_by(uid_onesignal: uid)
+      # d = Device.find_by(uid_onesignal: "9a7d889d-cddd-41c2-8c43-b478fac418f7")
+      # d = Device.find_by(uid_onesignal: "9a7d889d-cddd-41c2-8c43-b478fac418f7")
       if device
         @children = device.children.map do |d|          
           d.attributes.merge(notificationTotal: Notification.countNotification(d.id))
