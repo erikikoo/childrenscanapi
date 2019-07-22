@@ -98,7 +98,7 @@ module Api::V1
       device_ids = CheckDevice.getAllDevices user.children      
       
       if $evento
-        sending = PushNotification.sendNotificationForAllDevices($evento, device_ids, url_for($evento.cloudinary_url))
+        sending = PushNotification.sendNotificationForAllDevices($evento, device_ids, url_for($evento.cloudinary_url), 'evento')
       end
      
       if sending        
@@ -107,8 +107,6 @@ module Api::V1
         render json: {status: 404, message: "Ops!!, não foi possível enviar a notificação"}
       end
     end
-
-
 
     private
       def getLastNotifications

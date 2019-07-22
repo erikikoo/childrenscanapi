@@ -50,22 +50,36 @@ class PushNotification
         # return request
     end
 
-    def self.sendNotificationForAllDevices evento, device_ids, image_url = nil
-        $_image_url = image_url if image_url       
-          
+    def self.sendNotificationForAllDevices notification, device_ids, image_url = nil, target = nil
+         puts "========================================="    
+         
+         device_ids.each do |device|
+             puts device   
+         end
+         
+         puts "========================================="    
         params = {"app_id" => $APP_ID, 
-            "contents" => {"en" => evento.title},
+            "contents" => {"en" => notification.title},
             "include_player_ids" => device_ids,
-            # "included_segments" => ["Active Users", "Inactive Users"],
-            "big_picture" => $_image_url,
-            "priority" => 10,
-            "buttons" => [
-                {"id": 'subscribe', 'text': 'Participar', "icon": "#{ActionController::Base.helpers.image_url("like.png")}"}, 
-                {"id": 'unsubscribe', 'text': 'Não Participar', 'icon': "#{ActionController::Base.helpers.image_url("icons/unlike.png")}"}
-            ],
-            "data" => {"event_id": evento.id}            
-        }
-      
+            "priority" => 10
+            
+        }        
+
+        if (target == 'evento') 
+          
+            $_image_url = image_url if image_url    
+          
+            params.merge!("big_picture" => $_image_url)
+          
+            params.merge!("buttons" => [
+                    {"id": 'subscribe', 'text': 'Participar', "icon": "#{ActionController::Base.helpers.image_url("like.png")}"}, 
+                    {"id": 'unsubscribe', 'text': 'Não Participar', 'icon': "#{ActionController::Base.helpers.image_url("icons/unlike.png")}"}
+            ])  
+
+            params.merge!("data" => {"event_id": notification.id})
+
+        end
+
       headers = { "Authorization" => "Basic #{$API_KEY}", "Content-Type" => "application/json" }       
       
       http = Net::HTTP.new($URL.host, $URL.port)

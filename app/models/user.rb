@@ -1,6 +1,7 @@
 class User < ApplicationRecord
     enum status: [:desativado, :ativo]
 
+    has_many :alerts, dependent: :destroy
 
     has_many :monitor_users, dependent: :destroy
     has_many :sms_messages, through: :monitor_users

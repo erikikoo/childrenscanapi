@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   
   
   
+  
   namespace :api do
     namespace :v1 do      
       
@@ -41,6 +42,10 @@ Rails.application.routes.draw do
       
       get 'escolas/:user_id', to: "escolas#app_get_escolas"
 
+      get 'send_alert_for_all_devices', to: 'alerts#send_alert'
+      get 'app_get_alerts', to: 'alerts#app_get_alerts'
+      get 'app_get_escolas', to: 'escolas#app_get_escolas'
+      resources :alerts
       resources :mensalidades
       resources :escolas
       resources :event_children

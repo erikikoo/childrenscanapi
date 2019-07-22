@@ -2,7 +2,7 @@ module Api::V1
   class EscolasController < ApplicationController
     before_action :set_escola, only: [:show, :update, :destroy]
     before_action :getAllEscolasPerUser, only: [:destroy, :create]
-    before_action :getAllEscolasPerUser, only: [:app_get_escolas]
+    
     skip_before_action :authenticate_request, only: [:app_get_escolas]
     # GET /escolas
     def index
@@ -12,7 +12,8 @@ module Api::V1
       render json: @escolas
     end
 
-    def app_get_escolas
+    def app_get_escolas      
+      @escolas = Escola.select(:id, :nome).where(user_id: params[:user_id])
       render json: @escolas
     end
 
