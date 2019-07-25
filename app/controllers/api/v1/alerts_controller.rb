@@ -45,19 +45,24 @@ module Api::V1
     end
 
     def send_alert
-       
+      $_escola_id = params[:escola_id]
       $_alert = Alert.find(params[:alert_id])       
-      $_escola = Escola.find(params[:escola_id])      
       
-      $_children = $_escola.children if $_escola
+      if $_escola_id == 0 || $_escola_id == '0'
+        $_children = Child.all        
+      else
+        $_escola = Escola.find($_escola_id)
+        $_children = $_escola.children
+      end
+
       $_devices_id = CheckDevice.getAllDevices $_children if $_children
       
       $_sender = PushNotification.sendNotificationForAllDevices($_alert, $_devices_id ) if $_alert && $_devices_id
 
       if $_sender
-        render json: {status: 200, message: "Notificação enviada para todos os celulares cadastrados!"}  
+        render json: {status: 200, message: "Alerta enviado para todos os celulares cadastrados!"}  
       else        
-        render json: {status: 404, message: "Ops!!, não foi possível enviar a notificação"}
+        render json: {status: 404, message: "Ops!!, não foi possível enviar o alerta, tente novamente"}
       end
 
     end
