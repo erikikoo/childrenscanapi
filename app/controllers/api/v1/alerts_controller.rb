@@ -1,6 +1,6 @@
 module Api::V1
   class AlertsController < ApplicationController
-    before_action :set_alert, only: [:show, :update, :destroy]
+    before_action :set_alert, only: [:update, :destroy]
     before_action :getAllAlerts, only: [:index, :destroy, :update]
     skip_before_action :authenticate_request, only: [:app_get_alerts, :send_alert, :show]
     # GET /alerts
@@ -18,6 +18,7 @@ module Api::V1
       puts "======================================"
       puts "SHOW"
       puts "======================================"
+      @alert = Alert.where(id: params[:id])
       render json: @alert
     end
 
