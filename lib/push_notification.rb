@@ -58,17 +58,16 @@ class PushNotification
          end
          
          puts "========================================="    
-        params = {"app_id" => $APP_ID, 
-            
+        params = {
+            "app_id" => $APP_ID,             
             "include_player_ids" => device_ids,
-            "priority" => 10,
-            "data" => {"alerta_id": notification.id}
+            "priority" => 10           
         }        
 
         if (target == 'evento') 
           
             $_image_url = image_url if image_url    
-            params.merge!("contents" => {"en" => notification.id})
+            params.merge!("contents" => {"en" => notification.summary})
             params.merge!("big_picture" => $_image_url)
           
             params.merge!("buttons" => [
@@ -81,6 +80,7 @@ class PushNotification
         else 
             # se receber um alerta
             params.merge!("contents" => {"en" => notification.description})
+            params.merge!("data" => {"alerta_id": notification.id})
         end
 
       headers = { "Authorization" => "Basic #{$API_KEY}", "Content-Type" => "application/json" }       
