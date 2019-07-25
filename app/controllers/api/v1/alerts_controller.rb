@@ -2,7 +2,7 @@ module Api::V1
   class AlertsController < ApplicationController
     before_action :set_alert, only: [:show, :update, :destroy]
     before_action :getAllAlerts, only: [:index, :destroy, :update]
-    skip_before_action :authenticate_request, only: [:app_get_alerts, :send_alert]
+    skip_before_action :authenticate_request, only: [:app_get_alerts, :send_alert, :show]
     # GET /alerts
     def index
       render json: @alerts
@@ -15,6 +15,9 @@ module Api::V1
 
     # GET /alerts/1
     def show
+      puts "======================================"
+      puts "SHOW"
+      puts "======================================"
       render json: @alert
     end
 
