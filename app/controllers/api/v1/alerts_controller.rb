@@ -66,6 +66,10 @@ module Api::V1
       end
 
     end
+    def app_get_alert
+      @alert = PushNotification.getNotifications params[:alert_id]
+      render json: @alert
+    end
 
     private
 
