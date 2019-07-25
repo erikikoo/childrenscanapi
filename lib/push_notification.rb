@@ -59,10 +59,10 @@ class PushNotification
          
          puts "========================================="    
         params = {"app_id" => $APP_ID, 
-            "contents" => {"en" => notification.title},
+            "contents" => {"en" => notification.description},
             "include_player_ids" => device_ids,
-            "priority" => 10
-            
+            "priority" => 10,
+            "data" => {"alerta_id": notification.id}
         }        
 
         if (target == 'evento') 
