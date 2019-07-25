@@ -9,6 +9,7 @@ module Api::V1
       if @current_user.level === 3
         @escolas = Escola.all      
       end
+      @escolas = Escola.select(:id, :nome).where(user_id: params[:user_id])
       render json: @escolas
     end
 
