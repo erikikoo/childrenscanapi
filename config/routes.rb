@@ -46,7 +46,7 @@ Rails.application.routes.draw do
       get 'app_get_alerts', to: 'alerts#app_get_alerts'
       get 'app_get_escolas', to: 'escolas#app_get_escolas'
 
-      et 'app_get_alerta/:alert_id', to: 'alerts#app_get_alert'
+      get 'app_get_alerta/:alert_id', to: 'alerts#app_get_alert'
       resources :alerts
       resources :mensalidades
       resources :escolas
