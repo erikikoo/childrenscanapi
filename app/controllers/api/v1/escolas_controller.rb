@@ -8,8 +8,9 @@ module Api::V1
     def index
       if @current_user.level === 3
         @escolas = Escola.all      
+      else
+        @escolas = Escola.select(:id, :nome).where(user_id: params[:user_id])
       end
-      @escolas = Escola.select(:id, :nome).where(user_id: params[:user_id])
       render json: @escolas
     end
 
