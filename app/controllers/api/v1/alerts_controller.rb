@@ -31,7 +31,11 @@ module Api::V1
         end      
         @alerts = alerts
       end
-      
+      puts "===================================="
+      @alerts.echo do |alert|
+        puts alert.description
+      end
+      puts "===================================="
       
       # af144286de0ab9e2
       render json: @alerts
