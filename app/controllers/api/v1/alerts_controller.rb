@@ -22,7 +22,7 @@ module Api::V1
       if device
         alerts = []
       
-        d.children.each do |child|        
+        device.children.each do |child|        
            if child.escola 
                       
               alerts << child.escola.alerts
