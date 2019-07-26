@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_22_141328) do
+ActiveRecord::Schema.define(version: 2019_07_26_133426) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -90,6 +90,15 @@ ActiveRecord::Schema.define(version: 2019_07_22_141328) do
     t.string "uid_device"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "escola_alerts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "escola_id"
+    t.bigint "alert_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alert_id"], name: "index_escola_alerts_on_alert_id"
+    t.index ["escola_id"], name: "index_escola_alerts_on_escola_id"
   end
 
   create_table "escolas", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -211,6 +220,8 @@ ActiveRecord::Schema.define(version: 2019_07_22_141328) do
   add_foreign_key "children", "users"
   add_foreign_key "device_children", "children"
   add_foreign_key "device_children", "devices"
+  add_foreign_key "escola_alerts", "alerts"
+  add_foreign_key "escola_alerts", "escolas"
   add_foreign_key "escolas", "users"
   add_foreign_key "event_children", "children"
   add_foreign_key "event_children", "events"

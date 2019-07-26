@@ -1,33 +1,26 @@
 module Api::V1
   class ChildrenController < ApplicationController
     
-    before_action :set_child, only: [:destroy, :update_status, :show]
-    # before_action :get_child, only: [:show]    
+    before_action :set_child, only: [:destroy, :update_status, :show]    
     before_action :getAllChildren, only: [:index, :destroy, :generate_qr_code]
     skip_before_action :authenticate_request, only: [:getChildrenPerUidDevice, :create, :show, :update]
     
     # GET /children
-    def index
-      # if params[:uid] != 'undefined'         
-      #   find_child_per_device(params[:uid]) 
-        # @children = hasMensalidades?(@children)
-        render json: @children#, :include => {:user => {:only => :name}, :mensalidades => {:only => :mes}}      
+    def index      
+        render json: @children
       # end
     end
 
     def getChildrenPerUidDevice
-      # if params[:uid] != 'undefined' 
+      
       find_child_per_device(params[:uid])
       
       render json:  @children,:include => {:user => {:only => :name}}
-      # end
+      
     end
 
     # GET /children/1
-    def show
-      # @child = hasMensalidades?(@child)
-    
-      # render json: @child[0], :include => {:user => {:only => :name}, :escola => {:only => :nome}}
+    def show      
       render json: @child, :include => {:user => {:only => :name}, :escola => {:only => :nome}, :mensalidades => {:only => :mes}}
     end
 
@@ -108,7 +101,7 @@ module Api::V1
         find_child_per_device(params_uid_oneseignal)
         
         render json: {children: @children, uid: params_uid_oneseignal, message: 'Aluno atualizado com sucesso!'}
-        # render json: @children, message: 'Aluno atualizado com sucesso!'
+        
 
       else
         render json: @child.errors, status: :unprocessable_entity
