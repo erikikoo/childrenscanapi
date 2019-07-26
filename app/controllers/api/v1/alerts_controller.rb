@@ -20,16 +20,16 @@ module Api::V1
       @alerts = []
 
       if device
-        alerts = []
+        $_alerts = []
       
         device.children.each do |child|        
            if child.escola 
                       
-              alerts << child.escola.alerts
+              alerts << child.escola.alerts.last
             
            end
         end      
-        @alerts = alerts
+        @alerts = $_alerts
       end
       puts "===================================="
       @alerts.echo do |alert|
