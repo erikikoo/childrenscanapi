@@ -2,7 +2,7 @@ module Api::V1
   class AlertsController < ApplicationController
     before_action :set_alert, only: [:update, :destroy]
     before_action :getAllAlerts, only: [:index, :destroy, :update]
-    skip_before_action :authenticate_request, only: [:app_get_alerts, :send_alert, :show]
+    skip_before_action :authenticate_request, only: [:app_get_alerts, :send_alert, :show, :app_get_alerts_sending]
     # GET /alerts
     def index
       render json: @alerts
@@ -16,7 +16,7 @@ module Api::V1
     def app_get_alerts_sending
       device = Device.find_by(uid_device: params[:uid_device])
       # @alerts = device.children if device
-      # device = Device.find_by(uid_device: 'af144286de0ab9e2')
+      device = Device.find_by(uid_device: 'af144286de0ab9e2')
       @alerts = []
 
       if device
@@ -32,7 +32,7 @@ module Api::V1
         @alerts = $_alerts
       end
       puts "===================================="
-      @alerts.echo do |alert|
+      @alerts.each do |alert|
         puts alert.description
       end
       puts "===================================="
