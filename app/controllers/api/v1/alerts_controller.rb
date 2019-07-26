@@ -46,11 +46,11 @@ module Api::V1
     end
 
     def send_alert
-      $_escola_id = params[:escola_id]
+      $_escola_id = params[:escola_id].to_i
       $_alert_id = params[:alert_id]
       $_alert = Alert.find($_alert_id)
       
-      if $_escola_id == 0 || $_escola_id == '0'
+      if $_escola_id == 0
         $_children = Child.all        
       else
         $_escola = Escola.find($_escola_id)
@@ -62,8 +62,11 @@ module Api::V1
       $_sender = PushNotification.sendNotificationForAllDevices($_alert, $_devices_id ) if $_alert && $_devices_id
 
       if $_sender
-        EscolaAlert.create!(escola_id: $_escola_id, alert_id: $_alert_id)
-        
+        if $_escola_id != 0
+          EscolaAlert.create!(escola_id: $_escola_id, alert_id: $_alert_id)
+        else
+          EscolaAlert.create!(escola_id: :null, alert_id: $_alert_id)          
+        end
         render json: {status: 200, message: "Alerta enviado para todos os celulares cadastrados!"}  
       else        
         render json: {status: 404, message: "Ops!!, não foi possível enviar o alerta, tente novamente"}
