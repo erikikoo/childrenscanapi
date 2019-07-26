@@ -16,7 +16,7 @@ module Api::V1
     def app_get_alerts_sending
       device = Device.find_by(uid_device: params[:uid_device])
       # @alerts = device.children if device
-      device = Device.find_by(uid_device: 'af144286de0ab9e2')
+      # device = Device.find_by(uid_device: 'af144286de0ab9e2')
       @alerts = []
 
       if device
@@ -37,12 +37,7 @@ module Api::V1
         end      
         @alerts = $_alerts
       end
-      puts "===================================="
-      @alerts.each do |alert|
-        puts alert.id
-        puts alert.description
-      end
-      puts "===================================="
+     
       
       # af144286de0ab9e2
       render json: @alerts
