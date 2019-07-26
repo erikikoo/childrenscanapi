@@ -23,10 +23,10 @@ module Api::V1
         $_alerts = []
       
         device.children.each do |child|        
-           if child.escola 
-                      
-              $_alerts << child.escola.alerts.last
-            
+           if child.escola               
+              if (child.escola.alerts.last.id != $_alerts.id)
+                $_alerts << child.escola.alerts.last
+              end  
            end
         end      
         @alerts = $_alerts
