@@ -25,7 +25,7 @@ module Api::V1
         device.children.each do |child|        
            if child.escola 
                       
-              alerts << child.escola.alerts.last
+              $_alerts << child.escola.alerts.last
             
            end
         end      
