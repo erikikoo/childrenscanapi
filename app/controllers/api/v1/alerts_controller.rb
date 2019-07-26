@@ -66,6 +66,7 @@ module Api::V1
           EscolaAlert.create!(escola_id: $_escola_id, alert_id: $_alert_id)
         else
           EscolaAlert.create!(escola_id: :null, alert_id: $_alert_id)          
+          # EscolaAlert.create!(escola_id: :null, alert_id: 1)
         end
         render json: {status: 200, message: "Alerta enviado para todos os celulares cadastrados!"}  
       else        
