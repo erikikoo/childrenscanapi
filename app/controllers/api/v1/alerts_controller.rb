@@ -15,16 +15,19 @@ module Api::V1
 
     def app_get_alerts_sending
       device = Device.find_by(uid_device: params[:uid_device])
+      # d = Device.find_by(uid_device: 'af144286de0ab9e2')
       # @alerts = device.children if device
       @alerts = []
 
       if device 
         alerts = []
       
-        device.children.each do |child|        
-              child.escola.alerts.each do |a|
-                  alerts << a
-              end
+        d.children.each do |child|        
+           if child.escola 
+                      
+              alerts << child.escola.alerts
+            
+           end
         end      
         @alerts = alerts
       end
