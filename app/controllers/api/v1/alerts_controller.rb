@@ -24,15 +24,16 @@ module Api::V1
       
         device.children.each do |child|        
            if child.escola               
-              if (child.escola.alerts.last.id != $_alerts.id)
+              # if (child.escola.alerts.last.id != $_alerts.id)
                 $_alerts << child.escola.alerts.last
-              end  
+              # end  
            end
         end      
         @alerts = $_alerts
       end
       puts "===================================="
       @alerts.each do |alert|
+        puts alert.id
         puts alert.description
       end
       puts "===================================="
