@@ -15,7 +15,21 @@ module Api::V1
 
     def app_get_alerts_sending
       device = Device.find_by(uid_device: params[:uid_device])
-      @alerts = device.children[0].escola.alerts if device
+      # @alerts = device.children if device
+      @alerts = []
+
+      if device 
+        alerts = []
+      
+        device.children.each do |child|        
+              child.escola.alerts.each do |a|
+                  alerts << a
+              end
+        end      
+        @alerts = alerts
+      end
+      
+      
       # af144286de0ab9e2
       render json: @alerts
     end
