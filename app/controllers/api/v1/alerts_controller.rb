@@ -13,6 +13,12 @@ module Api::V1
       render json: @alerts
     end
 
+    def app_get_alerts_sending
+      child = Child.find_by(uid: params[:uid_device])
+      @alerts = child.escola.alerts if child      
+      render json: @alerts
+    end
+
     # GET /alerts/1
     def show      
       @alert = Alert.where(id: params[:id])
@@ -66,7 +72,6 @@ module Api::V1
           EscolaAlert.create!(escola_id: $_escola_id, alert_id: $_alert_id)
         else
           EscolaAlert.create!(escola_id: :null, alert_id: $_alert_id)          
-          # EscolaAlert.create!(escola_id: :null, alert_id: 1)
         end
         render json: {status: 200, message: "Alerta enviado para todos os celulares cadastrados!"}  
       else        

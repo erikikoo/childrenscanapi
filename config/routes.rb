@@ -40,6 +40,7 @@ Rails.application.routes.draw do
       get 'app_get_escolas', to: 'escolas#app_get_escolas'
 
       get 'app_get_alerta/:alert_id', to: 'alerts#app_get_alert'
+      get 'app_get_alertas_per_device/:uid_device', to: 'alerts#app_get_alerts_sending'
       resources :alerts
       resources :mensalidades
       resources :escolas
