@@ -20,7 +20,7 @@ module Api::V1
         children.each do |child|
           @alerts = child.escola.alertas.last
         end
-        
+      end  
       # af144286de0ab9e2
       render json: @alerts
     end
