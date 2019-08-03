@@ -31,18 +31,21 @@ class GenerateMessage
         sexo = aluno.sexo
         msn = ''
         if (acao == 'entrada') 
-            if(periodo == 'manha' || periodo == 'matutino') 
+            if(periodo == 'manha' || periodo == 'Intermediario') 
               msn = "Bom dia, #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} está conosco em breve estará na escola!"
-             elsif (periodo == 'vespertino' || periodo == 'tarde') 
-              msn = "Boa Tarde, #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} está conosco em breve estará na escola!"
-              
+             elsif (periodo == 'tarde') 
+              msn = "Boa Tarde, #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} está conosco em breve estará na escola!"              
+             elsif (periodo == 'noite') 
+              msn = "Boa Noite, #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} está conosco em breve estará na escola!"              
              end
         
         elsif (acao == 'saida') 
-            if(periodo == 'manha' || periodo == 'matutino') 
+            if(periodo == 'manha' || periodo == 'Intermediario') 
               msn = "Bom dia, em breve #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} estará em casa!"
-            elsif (periodo == 'vespertino' || periodo == 'tarde') 
+            elsif (periodo == 'tarde') 
               msn = "Boa Tarde, em breve #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} estará em casa!"
+            elsif (periodo == 'noite') 
+              msn = "Boa Noite, em breve #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} estará em casa!"
             end
         end  
         return msn
