@@ -27,16 +27,19 @@ module Api::V1
     # POST /children
     def create
       
-        @child = Child.new(child_params)           
+        @child = Child.new(child_params)
         @child.name = @child.name.downcase.squish
-         
-        params_uid_oneseignal = child_params[:devices_attributes][0][:uid_onesignal]
-        params_uid_device = child_params[:devices_attributes][0][:uid_onesignal]
-        #verifica se existe a criança
         
+        if child_params[:devices_attributes].present?
+          $_device_attributes = child_params[:devices_attributes]
+          params_uid_oneseignal = $_device_attributes[:uid_onesignal][0]
+          params_uid_device = $_device_attributes[:uid_onesignal][0]
+        end
+        
+        #verifica se existe a criança
         checkChild = CheckChild.existChildPerNameAndNasc?(@child.name, @child.nascimento) 
         #se existir criança
-        if checkChild
+      if checkChild && $_device_attributes
           #checa se existe o device
           device = CheckDevice.existDevicePerUid?(params_uid_oneseignal)
           unless device
@@ -57,13 +60,13 @@ module Api::V1
             render json: {status: :unprocessable_entity, message: 'Dispositivo e/ou Criança cadastrados!'}
           end
 
-        else
+      elsif $_device_attributes
 
           #se existir o dispositivo
           device = CheckDevice.existDevicePerUid?(params_uid_oneseignal)
           
           if device
-            child = Child.create!(name: @child.name, contato: @child.contato ,nascimento: @child.nascimento, responsavel: @child.responsavel, sexo: @child.sexo, user_id: @child.user_id, uid: GenerateUid.generate, venc: @child.venc, escola_id: @child.escola_id)
+            child = child_creating @child
                           
               if child
                 
@@ -86,8 +89,18 @@ module Api::V1
               render json: @child.errors, status: :unprocessable_entity, message: 'Ops, error ao cadastrar esta criança e dispositivo'
             end
           end
-          
+      elsif checkChild
+        render json: {status: :unprocessable_entity, message: 'Esta criança já possui cadastro'}
+      else
+          child = child_creating @child
+                          
+            if child
+              render json: {status: :created,  message: 'Criança cadastrado com sucesso!'}   
+            else
+              render json: child.errors, status: :unprocessable_entity, message: 'Ops, erro ao cadastrar esta criança'
+            end
         end
+        
        
     end
 
@@ -135,6 +148,10 @@ module Api::V1
 
     private
 
+   def child_creating child
+    $_child = Child.create!(name: child.name, contato: child.contato ,nascimento: child.nascimento, responsavel: child.responsavel, sexo: child.sexo, user_id: child.user_id, uid: GenerateUid.generate, venc: child.venc, escola_id: child.escola_id)
+    return $_child
+   end
 
 
     def find_child_per_device(uid)
