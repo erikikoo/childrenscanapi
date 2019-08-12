@@ -22,13 +22,13 @@ module Api::V1
       if device
         $_alerts = []
       
-        device.children.each do |child|        
-           if child.escola               
-              if $_alerts.length != 0
+        device.children.each do |child|
+           if child.escola
+              if $_alerts.length > 0
                 $_alerts.each do |alert| 
-                  # if (child.escola.alerts.last.id != alert.id)
+                  if (child.escola.alerts.last.id != alert.id)
                     $_alerts << alert
-                  # end
+                  end
                 end  
               else 
                 $_alerts << child.escola.alerts.last
@@ -38,7 +38,7 @@ module Api::V1
         @alerts = $_alerts
       end
      
-      
+      # return @alerts
       # af144286de0ab9e2
       render json: @alerts
     end
