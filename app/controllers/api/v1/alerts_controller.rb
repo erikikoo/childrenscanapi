@@ -24,15 +24,15 @@ module Api::V1
       
         device.children.each do |child|
            if child.escola
-              if $_alerts.length > 0
-                $_alerts.each do |alert| 
-                  if (child.escola.alerts.last.id != alert.id)
-                    $_alerts << alert
-                  end
-                end  
-              else 
-                $_alerts << child.escola.alerts.last
-              end 
+              # if $_alerts.length > 0
+                # $_alerts.each do |alert| 
+                  # if (child.escola.alerts.last.id != alert.id)
+                    # $_alerts << alert
+                  # end
+                # end  
+              # else 
+                $_alerts << child.escola.alerts.last if child.escola.alerts.last
+              # end 
            end
         end      
         @alerts = $_alerts
