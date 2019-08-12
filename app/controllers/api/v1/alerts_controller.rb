@@ -26,9 +26,15 @@ module Api::V1
            if child.escola
               if $_alerts.length > 0
                 $_alerts.each do |alert| 
-                  if child.escola.alerts && child.escola.alerts.last.id != alert.id
-                    $_alerts << alert
-                  end
+                  puts "=========================="
+                  puts child.escola.alerts.last.id
+                  puts "=========================="
+                  puts "=========================="
+                  puts alert.id
+                  puts "=========================="
+                  # if child.escola.alerts && child.escola.alerts.last.id != alert.id
+                  #   $_alerts << alert
+                  # end
                 end  
               else 
                 $_alerts << child.escola.alerts.last if child.escola.alerts.last
