@@ -3,7 +3,7 @@ module Api::V1
     
     before_action :set_child, only: [:destroy, :update_status, :show]    
     before_action :getAllChildren, only: [:index, :destroy, :generate_qr_code]
-    skip_before_action :authenticate_request, only: [:getChildrenPerUidDevice, :create, :show, :update]
+    skip_before_action :authenticate_request, only: [:getChildrenPerUidDevice, :create, :show, :update, :send_code]
     
     # GET /children
     def index      
@@ -146,12 +146,42 @@ module Api::V1
     end
 
     def send_code
-        puts "========================================="
-        puts params[:code]
-        puts "========================================="
-        # getAllChildren()
-        # render json: @children, :include => {:user => {:only => :name}, message: 'ok'}
-        # render json: {message: "Ok"}
+
+        $_code = params[:code]
+        puts "CODIGO ==========================="
+        $_code
+        puts "==========================="
+
+        $_params_uid_device = params[:uid_device]
+        puts "DEVICE UID ==========================="
+        $_params_uid_device
+        puts "==========================="
+
+        puts "ONESIGNAL UID ==========================="
+        $_params_uid_oneseignal
+        puts "==========================="
+        $_params_uid_oneseignal = params[:uid_onesignal]
+
+        $_child = Child.find_by(code: $_code)
+        $_device = CheckDevice.existDevicePerUid? $_params_uid_oneseignal if $_params_uid_oneseignal
+
+        if $_child && $_params_uid_oneseignal && !$_device
+
+            #cria o device
+            device = Device.create!(uid_onesignal: $_params_uid_oneseignal, uid_device: $_params_uid_device )
+            
+            #o relaciona com a crianca
+            DeviceChild.create!(device_id: device.id, child_id: $_child.id)
+
+            find_child_per_device(device.uid_onesignal)
+            
+            render json: {message: 'Aluno e dispositivo cadastrado com sucesso!'}
+        elsif $_device
+          render json: {message: 'Dispositivo já possui cadastro!'}  
+        else
+          render json: {message: 'Ops, error ao cadastrar esta criança e dispositivo'}
+        end
+        
     end
 
 
