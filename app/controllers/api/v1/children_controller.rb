@@ -145,6 +145,14 @@ module Api::V1
       end
     end
 
+    def send_code
+        puts "========================================="
+        puts params[:code]
+        puts "========================================="
+
+        render json: {message: "Ok"}
+    end
+
 
     private
 
