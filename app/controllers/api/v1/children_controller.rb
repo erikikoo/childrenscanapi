@@ -159,10 +159,10 @@ module Api::V1
         params[:uid_onesignal]
         puts "==========================="
 
-        $_child = Child.find_by(code: $_code)
+        $_child = Child.find_by(code: params[:code])
         $_device = CheckDevice.existDevicePerUid? params[:uid_onesignal] if params[:uid_onesignal]
 
-        if $_child && $_params_uid_oneseignal && !$_device
+        if $_child && params[:uid_onesignal] && !$_device
 
             #cria o device
             device = Device.create!(uid_onesignal: params[:uid_onesignal], uid_device: params[:uid_device] )
