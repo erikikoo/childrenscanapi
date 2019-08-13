@@ -149,8 +149,9 @@ module Api::V1
         puts "========================================="
         puts params[:code]
         puts "========================================="
-
-        render json: {message: "Ok"}
+        getAllChildren()
+        render json: @children, :include => {:user => {:only => :name}, message: 'ok'}
+        # render json: {message: "Ok"}
     end
 
 
