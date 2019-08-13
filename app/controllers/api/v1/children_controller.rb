@@ -33,7 +33,7 @@ module Api::V1
         if child_params[:devices_attributes].present?
           $_device_attributes = child_params[:devices_attributes][0]
           params_uid_oneseignal = $_device_attributes[:uid_onesignal]
-          params_uid_device = $_device_attributes[:uid_onesignal]
+          params_uid_device = $_device_attributes[:uid_device]
         end
         
         #verifica se existe a criança
