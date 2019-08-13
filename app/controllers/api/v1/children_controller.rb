@@ -31,9 +31,9 @@ module Api::V1
         @child.name = @child.name.downcase.squish
         
         if child_params[:devices_attributes].present?
-          $_device_attributes = child_params[:devices_attributes]
-          params_uid_oneseignal = $_device_attributes[:uid_onesignal][0]
-          params_uid_device = $_device_attributes[:uid_onesignal][0]
+          $_device_attributes = child_params[:devices_attributes][0]
+          params_uid_oneseignal = $_device_attributes[:uid_onesignal]
+          params_uid_device = $_device_attributes[:uid_onesignal]
         end
         
         #verifica se existe a criança
