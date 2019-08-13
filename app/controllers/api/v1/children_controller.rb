@@ -146,29 +146,26 @@ module Api::V1
     end
 
     def send_code
-
-        $_code = params[:code]
+        
         puts "CODIGO ==========================="
-        $_code
+        params[:code]
         puts "==========================="
-
-        $_params_uid_device = params[:uid_device]
+        
         puts "DEVICE UID ==========================="
-        $_params_uid_device
+        params[:uid_device]
         puts "==========================="
-
+        
         puts "ONESIGNAL UID ==========================="
-        $_params_uid_oneseignal
+        params[:uid_onesignal]
         puts "==========================="
-        $_params_uid_oneseignal = params[:uid_onesignal]
 
         $_child = Child.find_by(code: $_code)
-        $_device = CheckDevice.existDevicePerUid? $_params_uid_oneseignal if $_params_uid_oneseignal
+        $_device = CheckDevice.existDevicePerUid? params[:uid_onesignal] if params[:uid_onesignal]
 
         if $_child && $_params_uid_oneseignal && !$_device
 
             #cria o device
-            device = Device.create!(uid_onesignal: $_params_uid_oneseignal, uid_device: $_params_uid_device )
+            device = Device.create!(uid_onesignal: params[:uid_onesignal], uid_device: params[:uid_device] )
             
             #o relaciona com a crianca
             DeviceChild.create!(device_id: device.id, child_id: $_child.id)
