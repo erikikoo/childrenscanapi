@@ -179,7 +179,7 @@ module Api::V1
         elsif $_device
           render json: {message: 'Dispositivo já possui cadastro!'}  
         else
-          render json: {message: 'Ops, error ao cadastrar esta criança e dispositivo'}
+          render json: {message: 'Código inválido, entre em contato com seu transporte escolar'}
         end
         
     end
