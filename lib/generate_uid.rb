@@ -5,4 +5,9 @@ class GenerateUid
         return SecureRandom.uuid
     end
 
+    def self.generate_code
+        
+    end
+
+
 end
