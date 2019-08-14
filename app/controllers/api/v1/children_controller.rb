@@ -157,14 +157,16 @@ module Api::V1
         if $_params_uid_oneseignal && $_params_uid_device
           if $_child
               if $_device
+                _exist_child = false
                 $_device.children.each do |child|
-                  if child.id != $_child.id
-                      #o relaciona com a crianca
-                      DeviceChild.create!(device_id: $_device.id, child_id: $_child.id)
-                      $_message = 'Dispositivo relacionado com sucesso!'
-                      break
-                  end
+                  child.id == $_child.id ? _exist_child = true : _exist_child = false
                 end
+                puts "============================"
+                puts _exist_child
+                puts "============================"
+                #o relaciona com a crianca
+                # DeviceChild.create!(device_id: $_device.id, child_id: $_child.id)
+                # $_message = 'Dispositivo relacionado com sucesso!'
               elsif !$_device
                 #cria o device
                 device = Device.create!(uid_onesignal: $_params_uid_oneseignal, uid_device: $_params_uid_device )
@@ -175,10 +177,10 @@ module Api::V1
               find_child_per_device(device.uid_onesignal)
               
               render json: {message: $_message}
-            else
-              render json: {message: 'Código inválido, entre em contato com seu transporte escolar'}
-            end
           else
+              render json: {message: 'Código inválido, entre em contato com seu transporte escolar'}
+          end
+        else
             render json: {message: "Ops! Ocorreu um erro, perda de parametros"}
         end
         
