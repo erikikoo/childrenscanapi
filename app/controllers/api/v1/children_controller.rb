@@ -146,40 +146,40 @@ module Api::V1
     end
 
     def send_code
-
+        $_message = ''
         $_code = params[:code]
-        puts "CODIGO ==========================="
-        puts $_code
-        puts "==========================="
-
-        $_params_uid_device = params[:uid_device]
-        puts "DEVICE UID ==========================="
-        puts $_params_uid_device
-        puts "==========================="
-
+        $_params_uid_device = params[:uid_device]        
         $_params_uid_oneseignal = params[:uid_onesignal]
-        puts "ONESIGNAL UID ==========================="
-        puts $_params_uid_oneseignal
-        puts "==========================="
-
+        
         $_child = Child.find_by(code: $_code)
         $_device = CheckDevice.existDevicePerUid? $_params_uid_oneseignal if $_params_uid_oneseignal
 
-        if $_child && $_params_uid_oneseignal && !$_device
+        if $_params_uid_oneseignal && $_params_uid_device
+          if $_child
+              if $_device
+                $_device.children.each do |child|
+                  if child.id != $_child.id
+                      #o relaciona com a crianca
+                      DeviceChild.create!(device_id: $_device.id, child_id: $_child.id)
+                      $_message = 'Dispositivo relacionado com sucesso!'
+                      break
+                  end
+                end
+              elsif !$_device
+                #cria o device
+                device = Device.create!(uid_onesignal: $_params_uid_oneseignal, uid_device: $_params_uid_device )
+                DeviceChild.create!(device_id: device.id, child_id: $_child.id)
+                $_message = 'Dispositivo adicionado e relacionado com sucesso!'
+              end
 
-            #cria o device
-            device = Device.create!(uid_onesignal: params[:uid_onesignal], uid_device: $_params_uid_device )
-            
-            #o relaciona com a crianca
-            DeviceChild.create!(device_id: device.id, child_id: $_child.id)
-
-            find_child_per_device(device.uid_onesignal)
-            
-            render json: {message: 'Aluno e dispositivo cadastrado com sucesso!'}
-        elsif $_device
-          render json: {message: 'Dispositivo já possui cadastro!'}  
-        else
-          render json: {message: 'Código inválido, entre em contato com seu transporte escolar'}
+              find_child_per_device(device.uid_onesignal)
+              
+              render json: {message: $_message}
+            else
+              render json: {message: 'Código inválido, entre em contato com seu transporte escolar'}
+            end
+          else
+            render json: {message: "Ops! Ocorreu um erro, perda de parametros"}
         end
         
     end
