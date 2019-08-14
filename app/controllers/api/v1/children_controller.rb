@@ -157,24 +157,31 @@ module Api::V1
         if $_params_uid_oneseignal && $_params_uid_device
           if $_child
               if $_device
+                
                 _exist_child = false
+                
                 $_device.children.each do |child|
                   child.id == $_child.id ? _exist_child = true : _exist_child = false
                 end
+
                 puts "============================"
                 puts _exist_child
                 puts "============================"
                 #o relaciona com a crianca
-                # DeviceChild.create!(device_id: $_device.id, child_id: $_child.id)
-                # $_message = 'Dispositivo relacionado com sucesso!'
+                unless _exist_child
+                  DeviceChild.create!(device_id: $_device.id, child_id: $_child.id)
+                  $_message = 'Dispositivo relacionado com sucesso!'
+                else
+                  $_message = 'Dispositivo já cadastrado!'
+                end
               elsif !$_device
                 #cria o device
-                device = Device.create!(uid_onesignal: $_params_uid_oneseignal, uid_device: $_params_uid_device )
-                DeviceChild.create!(device_id: device.id, child_id: $_child.id)
+                $_device = Device.create!(uid_onesignal: $_params_uid_oneseignal, uid_device: $_params_uid_device )
+                DeviceChild.create!(device_id: $_device.id, child_id: $_child.id)
                 $_message = 'Dispositivo adicionado e relacionado com sucesso!'
               end
 
-              find_child_per_device(device.uid_onesignal)
+              find_child_per_device($_device.uid_onesignal)
               
               render json: {message: $_message}
           else
