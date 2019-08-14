@@ -82,7 +82,7 @@ module Api::V1
           else
             # @child.user_id = 1
             @child.uid = GenerateUid.generate
-            if @child.save!              
+            if child_creating              
               # @children = Child.last
               render json: {device_id: params_uid_oneseignal, status: :created,  message: 'Aluno e dispositivo cadastrado com sucesso!'}
             else                    
@@ -197,7 +197,7 @@ module Api::V1
     private
 
    def child_creating child
-    $_child = Child.create!(name: child.name, contato: child.contato ,nascimento: child.nascimento, responsavel: child.responsavel, sexo: child.sexo, user_id: child.user_id, uid: GenerateUid.generate, venc: child.venc, escola_id: child.escola_id)
+    $_child = Child.create!(name: child.name, contato: child.contato ,nascimento: child.nascimento, responsavel: child.responsavel, sexo: child.sexo, user_id: child.user_id, uid: GenerateUid.generate, venc: child.venc, escola_id: child.escola_id, code: GenerateUid.generate_code)
     return $_child
    end
 
