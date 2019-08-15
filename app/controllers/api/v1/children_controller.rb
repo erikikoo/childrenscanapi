@@ -228,7 +228,7 @@ module Api::V1
           name: child.name,
           responsavel: child.responsavel,
           user: {name: child.user.name},
-          code: {child.code},
+          code: child.code,
           user_id: child.user_id,
           last_mensalidade: child.mensalidades.maximum('mes')
         }
