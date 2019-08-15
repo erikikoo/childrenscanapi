@@ -224,11 +224,12 @@ module Api::V1
       @children = @children.map do |child|        
           
         {
-          id: child.id, 
-          name: child.name,            
-          responsavel: child.responsavel,            
+          id: child.id,
+          name: child.name,
+          responsavel: child.responsavel,
           user: {name: child.user.name},
-          user_id: child.user_id,            
+          code: {child.code},
+          user_id: child.user_id,
           last_mensalidade: child.mensalidades.maximum('mes')
         }
       end
