@@ -92,9 +92,15 @@ module Api::V1
       elsif checkChild
         render json: {status: :unprocessable_entity, message: 'Esta criança já possui cadastro'}
       else
-          child = child_creating @child
-                          
-            if child
+          # child = child_creating @child
+          
+            puts "=========================="
+            puts child.name
+            puts child.responsavel
+            puts child.custom_uid
+            puts "=========================="
+
+            if @child.save!
               render json: {status: :created,  message: 'Criança cadastrado com sucesso!'}   
             else
               render json: child.errors, status: :unprocessable_entity, message: 'Ops, erro ao cadastrar esta criança'
@@ -194,7 +200,7 @@ module Api::V1
     private
 
    def child_creating child
-    $_child = Child.create!(name: child.name, contato: child.contato ,nascimento: child.nascimento, responsavel: child.responsavel, sexo: child.sexo, user_id: child.user_id, uid: GenerateUid.generate, venc: child.venc, escola_id: child.escola_id, code: GenerateUid.generate_code, custom_uid: child.custom_uid)
+    $_child = Child.save!(name: child.name, contato: child.contato ,nascimento: child.nascimento, responsavel: child.responsavel, sexo: child.sexo, user_id: child.user_id, uid: GenerateUid.generate, venc: child.venc, escola_id: child.escola_id, code: GenerateUid.generate_code, custom_uid: child.custom_uid)
     return $_child
    end
 
