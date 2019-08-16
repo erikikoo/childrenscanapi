@@ -200,7 +200,7 @@ module Api::V1
     private
 
    def child_creating child
-    $_child = Child.save!(name: child.name, contato: child.contato ,nascimento: child.nascimento, responsavel: child.responsavel, sexo: child.sexo, user_id: child.user_id, uid: GenerateUid.generate, venc: child.venc, escola_id: child.escola_id, code: GenerateUid.generate_code, custom_uid: child.custom_uid)
+    $_child = Child.create!(name: child.name, contato: child.contato ,nascimento: child.nascimento, responsavel: child.responsavel, sexo: child.sexo, user_id: child.user_id, uid: GenerateUid.generate, venc: child.venc, escola_id: child.escola_id, code: GenerateUid.generate_code, custom_uid: child.custom_uid)
     return $_child
    end
 
