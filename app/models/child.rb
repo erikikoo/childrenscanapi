@@ -18,6 +18,7 @@ class Child < ApplicationRecord
     
     enum sexo: [:feminino, :masculino]
     enum status: [:desativado, :ativo]
+    enum tipo_viagem: [:ida_volta, :ida, :volta]
     
     # validates :name, uniqueness: { scope: :contato, case_sensitive: false , message: "Ops!, este nome JÁ ESTÁ CADASTRADO neste número de telefone" }    
     validates_presence_of :name, :contato, :responsavel, :sexo  

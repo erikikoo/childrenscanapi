@@ -106,14 +106,14 @@ module Api::V1
 
     # PATCH/PUT /children/1
     def update
-      params_uid_oneseignal = child_params[:devices_attributes][0][:uid_onesignal]
-      params_child = {name: child_params[:name], contato: child_params[:contato], nascimento: child_params[:nascimento], responsavel: child_params[:responsavel], sexo: child_params[:sexo], user_id: child_params[:user_id]}
+      # params_uid_oneseignal = child_params[:devices_attributes][0][:uid_onesignal]
+      # params_child = {name: child_params[:name], contato: child_params[:contato], nascimento: child_params[:nascimento], responsavel: child_params[:responsavel], sexo: child_params[:sexo], user_id: child_params[:user_id]}
       @child = Child.find(params[:id])
-      if @child.update(params_child)
+      if @child.update(child_params)
         
-        find_child_per_device(params_uid_oneseignal)
+        # find_child_per_device(params_uid_oneseignal)
         
-        render json: {children: @children, uid: params_uid_oneseignal, message: 'Aluno atualizado com sucesso!'}
+        render json: {children: @children, message: 'Aluno atualizado com sucesso!'}
         
 
       else
@@ -163,10 +163,7 @@ module Api::V1
                 $_device.children.each do |child|
                   child.id == $_child.id ? _exist_child = true : _exist_child = false
                 end
-
-                puts "============================"
-                puts _exist_child
-                puts "============================"
+                
                 #o relaciona com a crianca
                 unless _exist_child
                   DeviceChild.create!(device_id: $_device.id, child_id: $_child.id)
@@ -197,7 +194,7 @@ module Api::V1
     private
 
    def child_creating child
-    $_child = Child.create!(name: child.name, contato: child.contato ,nascimento: child.nascimento, responsavel: child.responsavel, sexo: child.sexo, user_id: child.user_id, uid: GenerateUid.generate, venc: child.venc, escola_id: child.escola_id, code: GenerateUid.generate_code)
+    $_child = Child.create!(name: child.name, contato: child.contato ,nascimento: child.nascimento, responsavel: child.responsavel, sexo: child.sexo, user_id: child.user_id, uid: GenerateUid.generate, venc: child.venc, escola_id: child.escola_id, code: GenerateUid.generate_code, custom_uid: child.custom_uid)
     return $_child
    end
 
@@ -254,7 +251,21 @@ module Api::V1
       # Only allow a trusted parameter "white list" through.
       def child_params       
         
-        params.require(:child).permit(:name, :contato, :nascimento, :responsavel, :sexo, :status, :venc,:user_id, :id, :escola_id,:created_at, :updated_at, devices_attributes: [:uid_onesignal, :uid_device] )
+        params.require(:child).permit(:name, 
+                                      :contato, 
+                                      :nascimento, 
+                                      :responsavel, 
+                                      :sexo, 
+                                      :status, 
+                                      :venc, 
+                                      :user_id,
+                                      :id, 
+                                      :escola_id, 
+                                      :custom_uid,
+                                      :tipo_viagem, 
+                                      :created_at, 
+                                      :updated_at, 
+                                      devices_attributes: [:uid_onesignal, :uid_device] )
       end
   end
 end

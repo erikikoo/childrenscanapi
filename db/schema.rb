@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_13_225752) do
+ActiveRecord::Schema.define(version: 2019_08_15_221746) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -65,6 +65,8 @@ ActiveRecord::Schema.define(version: 2019_08_13_225752) do
     t.bigint "escola_id"
     t.string "venc"
     t.string "code"
+    t.string "custom_uid"
+    t.integer "tipo_viagem", limit: 1
     t.index ["escola_id"], name: "index_children_on_escola_id"
     t.index ["user_id"], name: "index_children_on_user_id"
   end
