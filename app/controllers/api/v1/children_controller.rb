@@ -95,9 +95,9 @@ module Api::V1
           # child = child_creating @child
           
             puts "=========================="
-            puts child.name
-            puts child.responsavel
-            puts child.custom_uid
+            puts @child.name
+            puts @child.responsavel
+            puts @child.custom_uid
             puts "=========================="
 
             if @child.save!
