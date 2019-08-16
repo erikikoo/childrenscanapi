@@ -92,7 +92,7 @@ module Api::V1
       elsif checkChild
         render json: {status: :unprocessable_entity, message: 'Esta criança já possui cadastro'}
       else
-          child = child_creating @child
+          # child = child_creating(@child)
           
           # @child.code = GenerateUid.generate_code
             # puts "=========================="
