@@ -3,7 +3,7 @@ module Api::V1
     
     before_action :set_child, only: [:destroy, :update_status, :show]    
     before_action :getAllChildren, only: [:index, :destroy, :generate_qr_code]
-    skip_before_action :authenticate_request, only: [:getChildrenPerUidDevice, :create, :show, :update, :send_code]
+    skip_before_action :authenticate_request, only: [:getChildrenPerUidDevice, :create, :show, :update, :send_code, :list_children_per_escola]
     
     # GET /children
     def index      
