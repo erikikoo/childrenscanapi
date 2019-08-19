@@ -31,7 +31,7 @@ class GenerateMessage
         sexo = aluno.sexo
         msn = ''
         if (acao == 'entrada') 
-            if(periodo == 'manha' || periodo == 'Intermediario') 
+            if(periodo == 'manha' || periodo == 'intermediario') 
               msn = "Bom dia, #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} está conosco em breve estará na escola!"
              elsif (periodo == 'tarde') 
               msn = "Boa Tarde, #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} está conosco em breve estará na escola!"              
@@ -40,7 +40,7 @@ class GenerateMessage
              end
         
         elsif (acao == 'saida') 
-            if(periodo == 'manha' || periodo == 'Intermediario') 
+            if(periodo == 'manha' || periodo == 'intermediario') 
               msn = "Bom dia, em breve #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} estará em casa!"
             elsif (periodo == 'tarde') 
               msn = "Boa Tarde, em breve #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} estará em casa!"

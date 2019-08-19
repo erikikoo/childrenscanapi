@@ -92,20 +92,13 @@ module Api::V1
       elsif checkChild
         render json: {status: :unprocessable_entity, message: 'Esta criança já possui cadastro'}
       else
-          # child = child_creating(@child)
           
-          # @child.code = GenerateUid.generate_code
-            # puts "=========================="
-            # puts @child.name
-            # puts @child.responsavel
-            # puts @child.custom_uid
-            # puts "=========================="
-            if child_creating(@child)
-              render json: {status: :created,  message: 'Criança cadastrado com sucesso!'}   
-            else
-              render json: child.errors, status: :unprocessable_entity, message: 'Ops, erro ao cadastrar esta criança'
-            end
+        if child_creating(@child)
+          render json: {status: :created,  message: 'Criança cadastrado com sucesso!'}   
+        else
+          render json: child.errors, status: :unprocessable_entity, message: 'Ops, erro ao cadastrar esta criança'
         end
+      end
         
        
     end
@@ -194,6 +187,12 @@ module Api::V1
             render json: {message: "Ops! Ocorreu um erro, perda de parametros"}
         end
         
+    end
+
+    def list_children_per_escola
+      @children = Child.where(escola_id: params[:escola_id], tipo_viagem: [0,1])
+      # @children = Child.where(escola_id: 1, tipo_viagem: [0,1])
+      return @children
     end
 
 
