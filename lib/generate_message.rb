@@ -34,9 +34,9 @@ class GenerateMessage
             if(periodo == 'manha' || periodo == 'intermediario') 
               msn = "Bom dia, #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} está conosco em breve estará na escola!"
              elsif (periodo == 'tarde') 
-              msn = "Boa Tarde, #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} está conosco em breve estará na escola!"              
+              msn = "Boa Tarde, #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} está conosco em breve estará na escola!"
              elsif (periodo == 'noite') 
-              msn = "Boa Noite, #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} está conosco em breve estará na escola!"              
+              msn = "Boa Noite, #{sexo == :masculino ? 'o' : 'a' } #{customCapitalize(name)} está conosco em breve estará na escola!"
              end
         
         elsif (acao == 'saida') 

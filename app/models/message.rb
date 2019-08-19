@@ -1,7 +1,7 @@
 class Message < ApplicationRecord
   belongs_to :user
 
-  enum periodo: [:manha, :matutino, :tarde, :vespertino]
+  enum periodo: [:manha, :intermediario, :tarde, :noite]
   enum acao: [:entrada, :saida]
 
   validates_presence_of :acao, :periodo, :message_text, :user_id, message: "Ops!, todos os campos são obrigatórios"
