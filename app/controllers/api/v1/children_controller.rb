@@ -192,7 +192,7 @@ module Api::V1
     def list_children_per_escola
       @children = Child.where(escola_id: params[:escola_id], tipo_viagem: [0,1])
       # @children = Child.where(escola_id: 1, tipo_viagem: [0,1])
-      return @children
+      return render json: @children
     end
 
 
