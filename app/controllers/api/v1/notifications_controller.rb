@@ -90,12 +90,32 @@ module Api::V1
     end
 
     def send_evento_for_all_devices
-      evento_id = params['id']  
+      evento_id = params['id']
+      escola_id = params['escola_id']
+
+      # puts "++++++++++++++++++++++++++++++++"
+      # puts escola_id
+      # puts "++++++++++++++++++++++++++++++++"
+
       $evento = Event.find(evento_id);
       
       user = User.find($evento.user_id)
       
-      device_ids = CheckDevice.getAllDevices user.children      
+      if escola_id && escola_id != '0'
+          children = user.children.where(escola_id: escola_id)
+      else
+          children = user.children
+      end
+
+
+      # children.each do |child|
+      #   puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      #   puts child.name
+      #   puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      # end
+
+
+      device_ids = CheckDevice.getAllDevices children
       
       if $evento
         sending = PushNotification.sendNotificationForAllDevices($evento, device_ids, url_for($evento.cloudinary_url), 'evento')

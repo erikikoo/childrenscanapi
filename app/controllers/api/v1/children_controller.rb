@@ -199,7 +199,7 @@ module Api::V1
     private
 
    def child_creating child
-    $_child = Child.create!(name: child.name, contato: child.contato ,nascimento: child.nascimento, responsavel: child.responsavel, sexo: child.sexo, user_id: child.user_id, uid: GenerateUid.generate, venc: child.venc, escola_id: child.escola_id, code: GenerateUid.generate_code, custom_uid: child.custom_uid)
+    $_child = Child.create!(name: child.name, contato: child.contato ,nascimento: child.nascimento, responsavel: child.responsavel, sexo: child.sexo, user_id: child.user_id, uid: GenerateUid.generate, venc: child.venc, escola_id: child.escola_id, periodo: child.periodo, code: GenerateUid.generate_code, custom_uid: child.custom_uid)
     return $_child
    end
 
@@ -216,20 +216,22 @@ module Api::V1
       end
     end  
       
-    def getAllChildren     
+    def getAllChildren
       
-      if (@current_user.level == 3) 
+      if (@current_user.level == 3)
         @children = Child.all.order(user_id: :asc)
       else 
         @children = Child.includes(:user, :escola).where(user_id: @current_user)
       end        
-      @children = @children.map do |child|        
+      @children = @children.map do |child|
           
         {
           id: child.id,
+          custom_uid: child.custom_uid,
           name: child.name,
           responsavel: child.responsavel,
           user: {name: child.user.name},
+          periodo: child.periodo,
           code: child.code,
           user_id: child.user_id,
           last_mensalidade: child.mensalidades.maximum('mes')
@@ -267,7 +269,8 @@ module Api::V1
                                       :id, 
                                       :escola_id, 
                                       :custom_uid,
-                                      :tipo_viagem, 
+                                      :tipo_viagem,
+                                      :periodo, 
                                       :created_at, 
                                       :updated_at, 
                                       devices_attributes: [:uid_onesignal, :uid_device] )
