@@ -91,11 +91,7 @@ module Api::V1
 
     def send_evento_for_all_devices
       evento_id = params['id']
-      escola_id = params['escola_id']
-
-      # puts "++++++++++++++++++++++++++++++++"
-      # puts escola_id
-      # puts "++++++++++++++++++++++++++++++++"
+      escola_id = params['escola_id']     
 
       $evento = Event.find(evento_id);
       
@@ -106,14 +102,6 @@ module Api::V1
       else
           children = user.children
       end
-
-
-      # children.each do |child|
-      #   puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      #   puts child.name
-      #   puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      # end
-
 
       device_ids = CheckDevice.getAllDevices children
       

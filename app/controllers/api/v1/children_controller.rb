@@ -190,7 +190,9 @@ module Api::V1
     end
 
     def list_children_per_escola
-      @children = Child.where(escola_id: params[:escola_id], tipo_viagem: [0,1])
+
+      @children = Child.where("escola_id = ? AND (periodo = ? OR periodo IS NULL) AND (tipo_viagem = '0' OR tipo_viagem = '1' OR tipo_viagem IS NULL)", params[:escola_id], params[:periodo])
+      # @children = Child.where(escola_id: params[:escola_id], periodo: params[:periodo], tipo_viagem: [0, 1, :null])
       # @children = Child.where(escola_id: 1, tipo_viagem: [0,1])
       return render json: @children
     end
